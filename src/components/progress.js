@@ -1,0 +1,10 @@
+export const Progress = ({ state }) => {
+  return (
+    <div className="w-full h-2 bg-gray-200 rounded-full mt-2">
+      <div
+        style={{ width: `${state}%` }}
+        className={`h-full text-center text-xs text-white bg-purple-500 rounded-full ease-in duration-300`}
+      />
+    </div>
+  );
+};
