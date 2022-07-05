@@ -26,14 +26,16 @@ export const Select = (props) => {
   useEffect(() => {
     if (showItem)
       (async () => {
-        const data = await (await fetch(`${host.api}/user/roles`)).json();
+        const data = await (
+          await fetch(`${host.api}/permission/role/all`)
+        ).json();
         setItems(data);
       })();
   }, [showItem]);
   return (
     <div
       {...other}
-      className="pointer-events-auto w-auto text-[0.8125rem] leading-5 text-slate-700"
+      className="pointer-events-auto my-4 w-auto text-[0.8125rem] leading-5 text-slate-700"
     >
       <div className="font-semibold text-slate-900">{label}</div>
       <div
@@ -59,7 +61,7 @@ export const Select = (props) => {
             onClick={(e) => selectItem(e)}
             className="py-2 px-3 hover:bg-indigo-600 hover:text-white"
           >
-            {item}
+            {item.raw}
           </div>
         ))}
       </div>

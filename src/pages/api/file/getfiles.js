@@ -19,7 +19,7 @@ const getFiles = (p) => {
 };
 
 export const getFileFolder = () => {
-  return globalConfig.filePath;
+  return globalConfig.fileServerPath;
 };
 //先序遍历文件夹
 const dfs = (p) => {

@@ -35,6 +35,17 @@ const UserInfo = () => {
         label="激活"
         click={(e) => setUser({ ...User, active: e })}
       />
+
+      <Input
+        className="my-4"
+        label="email"
+        type="text"
+        onChange={(e) => {
+          setUser({ ...User, username: e.target.value });
+        }}
+        value={User.email}
+        placeholder={User.email}
+      />
       <div className="flex justify-between">
         <div className="pointer-events-auto m-8 rounded-md bg-indigo-600 py-2 px-3 text-[0.8125rem] font-semibold leading-5 text-center text-white hover:bg-indigo-500">
           确认修改

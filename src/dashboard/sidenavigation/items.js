@@ -24,7 +24,7 @@ export default function SidenavItems() {
             setMenus(data);
           });
       })();
-  }, [menus]);
+  }, [menus.length]);
   return (
     <ul>
       <li>
