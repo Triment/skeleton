@@ -4,6 +4,7 @@ export const host = {
 };
 export const config = {
   fileServerPath: '/Users/as/Desktop/圣贤之道/skeleton',
+  tokenprivateKey: 'xyawo123', 
   databaseConfig: {
     username: 'admin',
     password: 'admin@cd123',

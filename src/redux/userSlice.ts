@@ -1,4 +1,10 @@
 import { createSlice } from '@reduxjs/toolkit';
+import { User } from '../database/model';
+
+export interface UserStore {
+  token: string,
+  user: [k of User]
+}
 
 export const userSlice = createSlice({
   name: 'counter',

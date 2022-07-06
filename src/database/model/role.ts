@@ -4,7 +4,7 @@ import {
   Column,
   ManyToOne,
   OneToMany,
-  ManyToMany,
+  JoinTable
 } from 'typeorm';
 import { User } from './user';
 
@@ -28,7 +28,7 @@ class Menu {
   link = '';
 
   @ManyToOne(() => Role, (role) => role.menus)
-  role = undefined;
+  roles = undefined;
 }
 
 @Entity()
@@ -45,7 +45,8 @@ class Role {
   @OneToMany(() => User, (user) => user.role)
   users = undefined;
 
-  @OneToMany(() => Menu, (menu) => menu.role)
+  @JoinTable()
+  @OneToMany(() => Menu, (menu) => menu.roles)
   menus = undefined;
 }
 

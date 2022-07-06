@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { host } from '../../config';
+import { Menu } from '../../database/model';
 
 import data from './data';
 import FolderIcon from './icons/folder';
@@ -28,7 +29,7 @@ export default function SidenavItems() {
   return (
     <ul>
       <li>
-        {menus.map((item) => (
+        {menus.map((item: Menu) => (
           <Link href={item.link} key={item.title}>
             <a
               className={`${style.link} 

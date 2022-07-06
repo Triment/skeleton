@@ -5,7 +5,11 @@ import DashboardProvider from '../dashboard/provider/context';
 import ModelProvider from '../dashboard/provider/model';
 import { Provider } from 'react-redux';
 import store from '../redux/store';
-function MyApp({ Component, pageProps }) {
+import { host } from '../config';
+import { AppContext, AppInitialProps, AppProps } from 'next/app';
+import { NextPageContext, GetServerSideProps, NextApiRequest, NextApiResponse } from 'next';
+
+function MyApp({ Component, pageProps }:AppProps) {
   return (
     <>
       <Head>
@@ -15,7 +19,7 @@ function MyApp({ Component, pageProps }) {
         <DashboardProvider>
           <ModelProvider>
             <DashboardLayout>
-              <Component {...pageProps} />
+              <Component {...pageProps}/>
             </DashboardLayout>
           </ModelProvider>
         </DashboardProvider>
@@ -23,5 +27,11 @@ function MyApp({ Component, pageProps }) {
     </>
   );
 }
-
+MyApp.getInitialProps = async ({ctx}: AppContext & { ctx: { req: NextApiRequest, res: NextApiResponse } })=>{
+  console.log(ctx.req.cookies)
+  const data = await (await fetch(`${host.api}/auth/getmenu`)).json()//公共api
+  // ctx.req.redirect(200, '/login/login')
+  return { PublicMenu: data }
+}
 export default MyApp;
+
