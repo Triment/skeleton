@@ -1,5 +1,17 @@
 {
+    "presets": [
+        [
+            "next/babel",
+            {
+                "preset-env": {},
+                "class-properties": {
+                    "loose": true
+                }
+            }
+        ]
+    ],
     "plugins": [
+        "babel-plugin-transform-typescript-metadata",
         [
             "@babel/plugin-proposal-decorators",
             {
@@ -11,6 +23,13 @@
             {
                 "loose": true
             }
-        ]
+        ],
+        [
+            "@babel/plugin-proposal-private-methods", 
+            { 
+                "loose": true
+            }
+        ],
+        ["@babel/plugin-proposal-private-property-in-object", { "loose": true }]
     ]
 }
