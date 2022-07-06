@@ -1,34 +1,19 @@
 import fs from 'fs';
+import { NextApiRequest, NextApiResponse } from 'next';
 import path, { resolve } from 'path';
 import { config as globalConfig } from '../../../config';
-
-const getFiles = (p) => {
-  const root = fs.readdirSync(p);
-  const res = root.map((item) => {
-    const current = fs.statSync(path.resolve(p, item));
-    if (current.isDirectory()) {
-      return {
-        name: item,
-        type: 'folder',
-        children: getFiles(path.resolve(p, item)),
-      };
-    }
-    return { name: item, type: 'file' };
-  });
-  return res;
-};
 
 export const getFileFolder = () => {
   return globalConfig.fileServerPath;
 };
 //先序遍历文件夹
-const dfs = (p) => {
+const dfs = (p: string) => {
   if (!p) return;
   var res = [];
   var name = p.split('/').pop();
-  var stack = [{ value: p, name: name, children: fs.readdirSync(p), index: 1 }];
+  var stack: {value: string, name: string, children: string[], index: number}[] = [{ value: p, name: name!, children: fs.readdirSync(p), index: 1 }];
   while (stack.length > 0) {
-    var head = stack.shift();
+    var head = stack.shift()!;
     const isDIR = fs.statSync(head.value).isDirectory();
     let children;
     if (isDIR) {
@@ -56,7 +41,7 @@ const dfs = (p) => {
   }
   return res;
 };
-const handler = (req, res) => {
+const handler = (req: NextApiRequest, res: NextApiResponse) => {
   const filepath = getFileFolder();
   const data = dfs(filepath);
   res.status(200).json(data);

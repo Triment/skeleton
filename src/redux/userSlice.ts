@@ -3,7 +3,7 @@ import { User } from '../database/model';
 
 export interface UserStore {
   token: string,
-  user: [k of User]
+  user: Omit<User, 'role'> & { role: { menus: {title:string, link:string}[]} }
 }
 
 export const userSlice = createSlice({

@@ -29,7 +29,7 @@ export default function DashboardLayout({ children }: ComponentProps<'div'>) {
   const { modalOpen, refOfModal, show } = useModal();
  
   const { pathname } = useRouter()
-  const user = useSelector(state => (state as GlobalStore).userInfo.user) as User
+  const user = useSelector(state => (state as GlobalStore).userInfo.user)
   const ok = false
   publicMenus.map(item=>{//公共api
     if (item === pathname){

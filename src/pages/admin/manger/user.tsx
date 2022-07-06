@@ -6,8 +6,9 @@ import { PortalModal } from '../../../util/Portal';
 import { createContext, useContext, useState } from 'react';
 import { Input, Select } from '../../../components/input';
 import { CheckBox } from '../../../components/checkbox';
+import { User } from '../../../database/model';
 
-const Context = createContext();
+const Context = createContext<User | null>(null);
 //用户信息修改卡片
 const UserInfo = () => {
   const { User, setUser } = useContext(Context);
