@@ -1,4 +1,6 @@
-export const Progress = ({ state }) => {
+import { FC } from "react";
+
+export const Progress: FC<{state:number}> = ({ state }) => {
   return (
     <div className="w-full h-2 bg-gray-200 rounded-full mt-2">
       <div

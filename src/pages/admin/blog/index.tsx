@@ -1,9 +1,9 @@
+import { NextPageContext } from 'next';
 import { host } from '../../../config';
-import { useModal } from '../../../dashboard/provider/model';
+import { Post } from '../../../database/model';
 import { PortalModal } from '../../../util/Portal';
 
-export default function Blog({ posts }) {
-  const { modalOpen, refOfModal, show } = useModal();
+export default function Blog({ posts }:{posts: Post[]}) {
 
   const Login = () => (
     <div
@@ -76,14 +76,6 @@ export default function Blog({ posts }) {
 
           <div>
             <button
-              onClick={() =>
-                dispatch(
-                  login({
-                    user: { username: 'admin', role: 'admin' },
-                    token: 'token',
-                  }),
-                )
-              }
               type="submit"
               className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
             >
@@ -118,7 +110,6 @@ export default function Blog({ posts }) {
         <div key={i}>
           <div>{item.id}</div>
           <div>{item.content}</div>
-          <div>{item.star}</div>
         </div>
       ))}
       <div className="flex justify-center">
@@ -139,8 +130,8 @@ export default function Blog({ posts }) {
   );
 }
 
-export const getServerSideProps = async (ctx) => {
-  const posts = await (await fetch(`${host.api}/post/all`)).json();
+export const getServerSideProps = async (ctx: NextPageContext) => {
+  const posts: Post[] = await (await fetch(`${host.api}/post/all`)).json();
   return {
     props: {
       posts: posts,

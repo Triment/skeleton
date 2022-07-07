@@ -3,15 +3,20 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPenToSquare } from '@fortawesome/free-solid-svg-icons';
 import { useModal } from '../../../dashboard/provider/model';
 import { PortalModal } from '../../../util/Portal';
-import { createContext, useContext, useState } from 'react';
-import { Input, Select } from '../../../components/input';
+import { createContext, useContext, useEffect, useState } from 'react';
+import { Input, Select, SelectDataType } from '../../../components/input';
 import { CheckBox } from '../../../components/checkbox';
-import { User } from '../../../database/model';
+import { Role, User } from '../../../database/model';
+import { NextPageContext } from 'next';
 
-const Context = createContext<User | null>(null);
 //用户信息修改卡片
-const UserInfo = () => {
-  const { User, setUser } = useContext(Context);
+
+type UserInfoType = {
+  data: SelectDataType,
+  User: Omit<User, 'role'> & { role: Role }  ,
+  setUser: (arg0: Omit<User, 'role'> & { role: Role }) => void
+}
+const UserInfo = ({ data, User, setUser }: UserInfoType) => {
   if (!User) return null;
   return (
     <div className="w-auto h-auto first:mt-4 last:mb-4">
@@ -20,15 +25,16 @@ const UserInfo = () => {
         label="用户名"
         type="text"
         onChange={(e) => {
-          setUser({ ...User, username: e.target.value });
+          setUser({ ...User, username: e.target.value } as User);
         }}
         value={User.username}
         placeholder={User.username}
       />
       <Select
+        data={data}
         className="my-4 "
         label="角色"
-        value={User.role}
+        value={User.role!}
         click={(role) => setUser({ ...User, role: role })}
       />
       <CheckBox
@@ -42,7 +48,7 @@ const UserInfo = () => {
         label="email"
         type="text"
         onChange={(e) => {
-          setUser({ ...User, username: e.target.value });
+          setUser(User);
         }}
         value={User.email}
         placeholder={User.email}
@@ -61,13 +67,20 @@ const UserInfo = () => {
   );
 };
 
-export default function MangerUser({ users }) {
+export default function MangerUser({ users }: { users: User[] }) {
   const { show } = useModal();
-  const [currentUser, setUser] = useState();
+  const [currentUser, setUser] = useState<User>();
+  const [roles, setRoles] = useState<Role[]>([])
+
+  useEffect(() => {
+    (async () => {
+      setRoles(await (await fetch(`${host.api}/auth/role/all`)).json())
+    })()
+  }, [currentUser, roles.length])
   return (
     <div className="shadow-sm rounded-2xl w-min p-4 bg-white overflow-hidden my-8">
       <PortalModal>
-        <Context.Provider value={{ User: currentUser, setUser: setUser }}>
+        <Context.Provider value={{ User: currentUser!, setUser: setUser }}>
           <UserInfo />
         </Context.Provider>
       </PortalModal>
@@ -100,7 +113,6 @@ export default function MangerUser({ users }) {
               <td className="border-b border-slate-100 dark:border-slate-700 p-4 text-slate-500 dark:text-slate-400">
                 <div className="flex items-center pr-8">
                   <img
-                    src={item.avatar}
                     alt={item.username}
                     className="h-10 w-10 flex-none rounded-full"
                   />
@@ -142,8 +154,8 @@ export default function MangerUser({ users }) {
   );
 }
 
-export const getServerSideProps = async (ctx) => {
-  const users = await (await fetch(`${host.api}/user/all`)).json();
+export const getServerSideProps = async (ctx: NextPageContext) => {
+  const users: User[] = await (await fetch(`${host.api}/user/all`)).json();
   return {
     props: {
       users: users,

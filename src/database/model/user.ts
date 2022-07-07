@@ -52,11 +52,11 @@ class User {
 
   @Column('simple-array', { select: false, nullable: true })
   @OneToMany(() => Post, (post) => post.author)
-  posts = undefined;
+  posts = [];
 
   @Column('simple-array', { select: false, nullable: true })
   @OneToMany(() => Comment, (comment) => comment.author)
-  comments = undefined;
+  comments = [];
 
   @BeforeInsert()
   async hashPassword() {

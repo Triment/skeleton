@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-export const CheckBox = ({ enable, label, click }) => {
+export const CheckBox: React.FC<{enable:boolean, label: string, click:(arg0: boolean)=>void}> = ({ enable, label, click }) => {
   const [en, setEn] = useState(enable);
   return (
     <div className="my-4">

@@ -1,7 +1,8 @@
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { host } from '../config';
+import { Role } from '../database/model';
 
-export const Input = (props) => {
+export const Input: React.FC<{label: string} & React.ComponentProps<'input'>> = (props) => {
   const { label, ...inputProps } = props;
   return (
     <>
@@ -14,15 +15,17 @@ export const Input = (props) => {
   );
 };
 
-export const Select = (props) => {
+export type SelectDataType = { raw: string }
+
+export  function Select<T extends SelectDataType>(props: {label: string, data: T, click:(arg0: T)=>void, value: T}&React.ComponentProps<'div'>) {
   const { label, click, ...other } = props;
   const [value, setValue] = useState(props.value);
   const [showItem, setShow] = useState(false);
-  const selectItem = (e) => {
-    setValue(e.target.innerText);
+  const selectItem = (e: T) => {
+    setValue(e);
     setShow(false);
   };
-  const [selectItems, setItems] = useState([]);
+  const [selectItems, setItems] = useState<T[]>([]);
   useEffect(() => {
     if (showItem)
       (async () => {
@@ -45,7 +48,7 @@ export const Select = (props) => {
         }}
         className="mt-2 flex items-center justify-between rounded-md bg-white py-2 px-3 shadow-sm ring-1 ring-slate-700/10"
       >
-        {props.value}
+        {value.raw}
         <svg className="h-5 w-5 flex-none fill-slate-400">
           <path d="M10 3a1 1 0 0 1 .707.293l3 3a1 1 0 0 1-1.414 1.414L10 5.414 7.707 7.707a1 1 0 0 1-1.414-1.414l3-3A1 1 0 0 1 10 3Zm-3.707 9.293a1 1 0 0 1 1.414 0L10 14.586l2.293-2.293a1 1 0 0 1 1.414 1.414l-3 3a1 1 0 0 1-1.414 0l-3-3a1 1 0 0 1 0-1.414Z"></path>
         </svg>
@@ -58,7 +61,7 @@ export const Select = (props) => {
         {selectItems.map((item, i) => (
           <div
             key={i}
-            onClick={(e) => selectItem(e)}
+            onClick={(e) => selectItem(item)}
             className="py-2 px-3 hover:bg-indigo-600 hover:text-white"
           >
             {item.raw}

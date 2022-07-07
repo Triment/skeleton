@@ -10,7 +10,7 @@ import { User } from './user';
 
 @Entity()
 class Menu {
-  constructor(title, icon, link) {
+  constructor(title: string, icon:string, link:string) {
     this.title = title;
     this.icon = icon;
     this.link = link;
@@ -33,7 +33,7 @@ class Menu {
 
 @Entity()
 class Role {
-  constructor(name) {
+  constructor(name:string) {
     this.raw = name;
   }
   @PrimaryGeneratedColumn('uuid')
