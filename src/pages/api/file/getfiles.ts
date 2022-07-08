@@ -9,18 +9,23 @@ export const getFileFolder = () => {
 
 //
 export type FileItemType = {
-  name: string,
-  type: string,
-  children: FileItemType,
-  fullpath: string,
-  index: number,
-}
+  name: string;
+  type: string;
+  children: FileItemType;
+  fullpath: string;
+  index: number;
+};
 //先序遍历文件夹
 const dfs = (p: string) => {
   if (!p) return;
   var res = [];
   var name = p.split('/').pop();
-  var stack: {value: string, name: string, children: string[], index: number}[] = [{ value: p, name: name!, children: fs.readdirSync(p), index: 1 }];
+  var stack: {
+    value: string;
+    name: string;
+    children: string[];
+    index: number;
+  }[] = [{ value: p, name: name!, children: fs.readdirSync(p), index: 1 }];
   while (stack.length > 0) {
     var head = stack.shift()!;
     const isDIR = fs.statSync(head.value).isDirectory();

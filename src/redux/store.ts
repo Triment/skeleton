@@ -7,5 +7,5 @@ export default configureStore({
 });
 
 export interface GlobalStore {
-  userInfo: UserStore
+  userInfo: UserStore;
 }

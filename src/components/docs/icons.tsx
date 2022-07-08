@@ -1,6 +1,6 @@
-import React from "react";
+import React from 'react';
 
-export const FolderIcon: React.FC<{className?:string}> = ({ className }) => (
+export const FolderIcon: React.FC<{ className?: string }> = ({ className }) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     className={`text-yellow-400 ${className || 'h-5 w-5 mt-0.5'}`}
@@ -16,7 +16,7 @@ export const FolderIcon: React.FC<{className?:string}> = ({ className }) => (
   </svg>
 );
 
-export const FileIcon: React.FC<{className?:string}> = ({ className }) => (
+export const FileIcon: React.FC<{ className?: string }> = ({ className }) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     className={className || 'h-5 w-5'}
@@ -33,7 +33,7 @@ export const FileIcon: React.FC<{className?:string}> = ({ className }) => (
   </svg>
 );
 
-export const JsIcon: React.FC<{className?:string}> = ({ className }) => (
+export const JsIcon: React.FC<{ className?: string }> = ({ className }) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     viewBox="0 0 48 48"

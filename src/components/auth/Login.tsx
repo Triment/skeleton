@@ -1,15 +1,26 @@
-import { NextPageContext } from 'next';
-import { host } from '../../../config';
-import { Post } from '../../../database/model';
-import { PortalModal } from '../../../util/Portal';
+import { useState } from 'react';
+import { host } from '../../config';
 
-export default function Blog({ posts }: { posts: Post[] }) {
-  const Login = () => (
+export const Login: React.FC<{}> = () => {
+  const [loginForm, setForm] = useState<{ username: string; password: string }>(
+    { username: '', password: '' },
+  );
+  const submit = () => {
+    fetch(`${host.api}/auth/login`, {
+      method: 'POST',
+      body: JSON.stringify(loginForm),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        console.log(data);
+      });
+  };
+  return (
     <div
       onClick={(e) => {
-        e.preventDefault();
+        e.preventDefault(); //阻止事件冒泡
       }}
-      className="min-h-full flex items-center justify-center py-6 px-4 sm:px-6 lg:px-8"
+      className="h-full h-screen flex items-center justify-center py-6 px-4 sm:px-6 lg:px-8"
     >
       <div className="max-w-md w-full">
         <form className="mt-8 space-y-6" action="#" method="POST">
@@ -24,6 +35,9 @@ export default function Blog({ posts }: { posts: Post[] }) {
                 name="email"
                 type="email"
                 autoComplete="email"
+                onChange={(e) =>
+                  setForm({ ...loginForm, username: e.currentTarget.value })
+                }
                 required
                 className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
                 placeholder="账号"
@@ -38,6 +52,9 @@ export default function Blog({ posts }: { posts: Post[] }) {
                 name="password"
                 type="password"
                 autoComplete="current-password"
+                onChange={(e) =>
+                  setForm({ ...loginForm, password: e.currentTarget.value })
+                }
                 required
                 className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
                 placeholder="密码"
@@ -75,6 +92,7 @@ export default function Blog({ posts }: { posts: Post[] }) {
 
           <div>
             <button
+              onClick={submit}
               type="submit"
               className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
             >
@@ -100,40 +118,4 @@ export default function Blog({ posts }: { posts: Post[] }) {
       </div>
     </div>
   );
-  return (
-    <div className="shadow-lg rounded-2xl bg-white p-4">
-      <PortalModal>
-        <Login />
-      </PortalModal>
-      {posts.map((item, i) => (
-        <div key={i}>
-          <div>{item.id}</div>
-          <div>{item.content}</div>
-        </div>
-      ))}
-      <div className="flex justify-center">
-        <span className="px-2  py-1 flex items-center font-semibold text-xs first:rounded-l-md last:rounded-r-lg text-green-700 bg-green-50 hover:text-green-600 border hover:border-green-600 hover:bg-white">
-          1
-        </span>
-        <span className="px-2  py-1 flex items-center font-semibold text-xs first:rounded-l-md last:rounded-r-lg text-green-700 bg-green-50 hover:text-green-600 border hover:border-green-600 hover:bg-white">
-          1
-        </span>
-        <span className="px-2  py-1 flex items-center font-semibold text-xs first:rounded-l-md last:rounded-r-lg text-green-700 bg-green-50 hover:text-green-600 border hover:border-green-600 hover:bg-white">
-          1
-        </span>
-        <span className="px-2  py-1 flex items-center font-semibold text-xs first:rounded-l-md last:rounded-r-lg text-green-700 bg-green-50 hover:text-green-600 border hover:border-green-600 hover:bg-white">
-          1
-        </span>
-      </div>
-    </div>
-  );
-}
-
-export const getServerSideProps = async (ctx: NextPageContext) => {
-  const posts: Post[] = await (await fetch(`${host.api}/post/all`)).json();
-  return {
-    props: {
-      posts: posts,
-    },
-  };
 };

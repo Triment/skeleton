@@ -1,18 +1,19 @@
-import React, {  MutableRefObject } from 'react';
+import React, { MutableRefObject } from 'react';
 import { useRouter } from 'next/router';
 
 // create new context
 
-
 interface TypeContext {
-  open: boolean,
-  ref: MutableRefObject<null>,
-  toggle: () => void
+  open: boolean;
+  ref: MutableRefObject<null>;
+  toggle: () => void;
 }
 
 const Context = React.createContext<TypeContext | null>(null);
 
-const DashboardProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+const DashboardProvider: React.FC<{ children: React.ReactNode }> = ({
+  children,
+}) => {
   const [open, setOpen] = React.useState(false);
   const ref = React.useRef(null);
   const router = useRouter();
@@ -58,9 +59,9 @@ const DashboardProvider: React.FC<{ children: React.ReactNode }> = ({ children }
       {children}
     </Context.Provider>
   );
-}
+};
 
-export default DashboardProvider
+export default DashboardProvider;
 
 // custom hook to consume all context values { open, ref, toggle }
 export function useToggle(): TypeContext {

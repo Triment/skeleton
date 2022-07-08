@@ -9,14 +9,14 @@ import { CheckBox } from '../../../components/checkbox';
 import { Role, User } from '../../../database/model';
 import { NextPageContext } from 'next';
 
-type UserWithRole = Omit<User, 'role'> & { role: Role }
+type UserWithRole = Omit<User, 'role'> & { role: Role };
 //用户信息修改卡片
 
 type UserInfoType = {
-  roles: SelectDataType[],
-  user: UserWithRole  ,
-  setUser: (arg0: UserWithRole) => void
-}
+  roles: SelectDataType[];
+  user: UserWithRole;
+  setUser: (arg0: UserWithRole) => void;
+};
 const UserInfo = ({ roles, user, setUser }: UserInfoType) => {
   if (!user) return null;
   return (
@@ -68,13 +68,19 @@ const UserInfo = ({ roles, user, setUser }: UserInfoType) => {
   );
 };
 
-export default function MangerUser({ users, roles }: { users: UserWithRole[], roles: Role[] }) {
+export default function MangerUser({
+  users,
+  roles,
+}: {
+  users: UserWithRole[];
+  roles: Role[];
+}) {
   const { show } = useModal();
   const [currentUser, setUser] = useState<UserWithRole>();
   return (
     <div className="shadow-sm rounded-2xl w-min p-4 bg-white overflow-hidden my-8">
       <PortalModal>
-          <UserInfo roles={roles} user={currentUser!} setUser={setUser} />
+        <UserInfo roles={roles} user={currentUser!} setUser={setUser} />
       </PortalModal>
       <table className="border-collapse table-auto text-sm">
         <thead>
@@ -147,12 +153,12 @@ export default function MangerUser({ users, roles }: { users: UserWithRole[], ro
 }
 
 export const getServerSideProps = async (ctx: NextPageContext) => {
-  const users: User[] = await (await fetch(`${host.api}/user/all`)).json();//获取用户
-  const roles: Role[] = await (await fetch(`${host.api}/auth/role/all`)).json();//获取角色
+  const users: User[] = await (await fetch(`${host.api}/user/all`)).json(); //获取用户
+  const roles: Role[] = await (await fetch(`${host.api}/auth/role/all`)).json(); //获取角色
   return {
     props: {
       users: users,
-      roles: roles
+      roles: roles,
     },
   };
 };

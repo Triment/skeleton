@@ -4,13 +4,13 @@ import {
   Column,
   ManyToOne,
   OneToMany,
-  JoinTable
+  JoinTable,
 } from 'typeorm';
 import { User } from './user';
 
 @Entity()
 class Menu {
-  constructor(title: string, icon:string, link:string) {
+  constructor(title: string, icon: string, link: string) {
     this.title = title;
     this.icon = icon;
     this.link = link;
@@ -33,7 +33,7 @@ class Menu {
 
 @Entity()
 class Role {
-  constructor(name:string) {
+  constructor(name: string) {
     this.raw = name;
   }
   @PrimaryGeneratedColumn('uuid')

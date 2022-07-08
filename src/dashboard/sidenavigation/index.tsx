@@ -14,12 +14,18 @@ const style = {
   default: `bg-white h-screen overflow-y-auto top-0 lg:relative`,
 };
 
-export default function SideNavigation({ mobilePosition }:{ mobilePosition: string}) {
+export default function SideNavigation({
+  mobilePosition,
+}: {
+  mobilePosition: string;
+}) {
   const { open, ref } = useToggle();
   return (
     <aside
       ref={ref}
-      className={`${style.default} ${(style.mobilePosition as any)[mobilePosition]} 
+      className={`${style.default} ${
+        (style.mobilePosition as any)[mobilePosition]
+      } 
        ${open ? style.open : style.close} ${css.scrollbar}`}
     >
       <div className={style.container}>

@@ -11,7 +11,7 @@ const DataBase = new DataSource({
   password: config.databaseConfig.password,
   synchronize: true,
   entities: [Comment, Post, Menu, Role, User],
-  migrations: []
+  migrations: [],
 });
 
 export { DataBase };

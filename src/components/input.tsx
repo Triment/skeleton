@@ -2,7 +2,9 @@ import React, { useEffect, useState } from 'react';
 import { host } from '../config';
 import { Role } from '../database/model';
 
-export const Input: React.FC<{label: string} & React.ComponentProps<'input'>> = (props) => {
+export const Input: React.FC<
+  { label: string } & React.ComponentProps<'input'>
+> = (props) => {
   const { label, ...inputProps } = props;
   return (
     <>
@@ -15,9 +17,16 @@ export const Input: React.FC<{label: string} & React.ComponentProps<'input'>> = 
   );
 };
 
-export type SelectDataType = { raw: string }
+export type SelectDataType = { raw: string };
 
-export  function Select<T extends SelectDataType>(props: {label: string, data: T[], click:(arg0: T)=>void, value: T}&React.ComponentProps<'div'>) {
+export function Select<T extends SelectDataType>(
+  props: {
+    label: string;
+    data: T[];
+    click: (arg0: T) => void;
+    value: T;
+  } & React.ComponentProps<'div'>,
+) {
   const { label, click, ...other } = props;
   const [value, setValue] = useState(props.value);
   const [showItem, setShow] = useState(false);
@@ -70,4 +79,4 @@ export  function Select<T extends SelectDataType>(props: {label: string, data: T
       </div>
     </div>
   );
-};
+}

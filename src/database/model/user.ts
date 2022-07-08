@@ -1,6 +1,4 @@
-import {
-  createHmac,
-} from 'crypto';
+import { createHmac } from 'crypto';
 import {
   Entity,
   PrimaryGeneratedColumn,
@@ -21,7 +19,12 @@ export function aesEncrypt(data: string) {
 
 @Entity()
 class User {
-  constructor(username: string, password:string, active:boolean, email:string) {
+  constructor(
+    username: string,
+    password: string,
+    active: boolean,
+    email: string,
+  ) {
     this.username = username;
     this.password = password;
     this.active = active;

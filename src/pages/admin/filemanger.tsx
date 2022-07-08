@@ -35,7 +35,7 @@ export default function fileManger({ data }: { data: FileItemType[] }) {
     const rate = response.headers.get('Rate');
     //console.log(contentLength, '内容大小')
     let receivedLength = 0;
-    let chunks: Uint8Array[]= new Array<Uint8Array>();
+    let chunks: Uint8Array[] = new Array<Uint8Array>();
     var startLength = 0;
     const rateInterval = setInterval(() => {
       let leng = 0;
@@ -52,7 +52,7 @@ export default function fileManger({ data }: { data: FileItemType[] }) {
       }
       chunks.push(value);
       receivedLength += value.length;
-      let prog = ((receivedLength / parseInt(contentLength!)) * 100);
+      let prog = (receivedLength / parseInt(contentLength!)) * 100;
       prog === downloadProgress ? '' : setProgress(prog);
       //setProgress(prog===downloadProgress?)
     }
@@ -124,7 +124,7 @@ export default function fileManger({ data }: { data: FileItemType[] }) {
         >
           {item.type == 'folder' ? <FolderIcon /> : <FileIcon />}
           <span
-            onClick={()=>
+            onClick={() =>
               item.type === 'file' ? () => downloadFile(item.fullpath) : null
             }
             className="pl-2 hover:text-yellow-500 cursor-pointer ease-in duration-300"
@@ -138,7 +138,9 @@ export default function fileManger({ data }: { data: FileItemType[] }) {
 }
 
 export const getServerSideProps = async (ctx: NextPageContext) => {
-  const data: FileItemType[] = await (await fetch(`${host.api}/file/getfiles`)).json();
+  const data: FileItemType[] = await (
+    await fetch(`${host.api}/file/getfiles`)
+  ).json();
   return {
     props: {
       data: data,

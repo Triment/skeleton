@@ -7,9 +7,9 @@ import { Provider } from 'react-redux';
 import store from '../redux/store';
 import { host } from '../config';
 import { AppContext, AppInitialProps, AppProps } from 'next/app';
-import { NextPageContext, GetServerSideProps, NextApiRequest, NextApiResponse } from 'next';
+import { NextApiRequest, NextApiResponse } from 'next';
 
-function MyApp({ Component, pageProps }:AppProps) {
+function MyApp({ Component, pageProps }: AppProps) {
   return (
     <>
       <Head>
@@ -19,7 +19,7 @@ function MyApp({ Component, pageProps }:AppProps) {
         <DashboardProvider>
           <ModelProvider>
             <DashboardLayout>
-              <Component {...pageProps}/>
+              <Component {...pageProps} />
             </DashboardLayout>
           </ModelProvider>
         </DashboardProvider>
@@ -27,11 +27,12 @@ function MyApp({ Component, pageProps }:AppProps) {
     </>
   );
 }
-MyApp.getInitialProps = async ({ctx}: AppContext & { ctx: { req: NextApiRequest, res: NextApiResponse } })=>{
-  console.log(ctx.req.cookies)
-  const data = await (await fetch(`${host.api}/auth/getmenu`)).json()//公共api
+MyApp.getInitialProps = async ({
+  ctx,
+}: AppContext & { ctx: { req: NextApiRequest; res: NextApiResponse } }) => {
+  console.log(ctx.req.cookies);
+  const data = await (await fetch(`${host.api}/auth/getmenu`)).json(); //公共api
   // ctx.req.redirect(200, '/login/login')
-  return { PublicMenu: data }
-}
+  return { PublicMenu: data };
+};
 export default MyApp;
-

@@ -1,24 +1,25 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { User } from '../database/model';
+import { Menu, Role, User } from '../database/model';
 
 export interface UserStore {
-  token: string,
-  user: Omit<User, 'role'> & { role: { menus: {title:string, link:string}[]} }
+  user: Omit<User, 'role'> & {
+    role: Omit<Role, 'menus'> & {
+      menus: Menu[];
+    };
+  };
 }
 
 export const userSlice = createSlice({
   name: 'counter',
   initialState: {
-    token: '',
     user: null,
   },
   reducers: {
     login: (state, action) => {
-      state.token = action.payload.token;
+      console.log(action);
       state.user = action.payload.user;
     },
     logout: (state) => {
-      state.token = '';
       state.user = null;
     },
   },

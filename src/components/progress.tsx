@@ -1,6 +1,6 @@
-import { FC } from "react";
+import { FC } from 'react';
 
-export const Progress: FC<{state:number}> = ({ state }) => {
+export const Progress: FC<{ state: number }> = ({ state }) => {
   return (
     <div className="w-full h-2 bg-gray-200 rounded-full mt-2">
       <div
