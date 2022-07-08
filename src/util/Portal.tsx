@@ -5,7 +5,7 @@ import React, {
   useState,
 } from 'react';
 import ReactDOM from 'react-dom';
-import { useModal } from '../dashboard/provider/model';
+import { useModal } from '../dashboard/provider/modal';
 
 export const PortalModal = ({ children }: { children: ReactNode }) => {
   const { refOfModal, show } = useModal();

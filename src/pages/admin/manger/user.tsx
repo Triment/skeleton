@@ -1,7 +1,7 @@
 import { host } from '../../../config';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPenToSquare } from '@fortawesome/free-solid-svg-icons';
-import { useModal } from '../../../dashboard/provider/model';
+import { useModal } from '../../../dashboard/provider/modal';
 import { PortalModal } from '../../../util/Portal';
 import { createContext, useContext, useEffect, useState } from 'react';
 import { Input, Select, SelectDataType } from '../../../components/input';

@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { FileIcon, FolderIcon } from '../../components/docs/icons';
 import { Progress } from '../../components/progress';
 import { host } from '../../config';
-import { useModal } from '../../dashboard/provider/model';
+import { useModal } from '../../dashboard/provider/modal';
 import { PortalModal } from '../../util/Portal';
 import { NextPageContext } from 'next';
 import { FileItemType } from '../api/file/getfiles';

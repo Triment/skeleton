@@ -3,7 +3,7 @@ import Overlay from './provider/overlay';
 import TopNavigation from './topnavigation';
 import SideNavigation from './sidenavigation';
 import { useToggle } from './provider/context';
-import { useModal } from './provider/model';
+import { useModal } from './provider/modal';
 import { useRouter } from 'next/router';
 import { ComponentProps } from 'react';
 import { useSelector } from 'react-redux';

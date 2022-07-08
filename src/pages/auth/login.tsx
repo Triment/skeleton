@@ -1,10 +1,12 @@
 import { useState } from 'react';
 import { host } from '../../config';
+import { useModal } from '../../dashboard/provider/modal';
 import { login } from '../../redux/userSlice';
 
 export default function Login() {
   const [username, setUserName] = useState('');
   const [password, setPassword] = useState('');
+  const { modalOpen } = useModal();
   const submit = () => {
     if (!username || !password) {
       console.log('请填写名字密码，缺一不可');
