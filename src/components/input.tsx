@@ -17,7 +17,7 @@ export const Input: React.FC<{label: string} & React.ComponentProps<'input'>> = 
 
 export type SelectDataType = { raw: string }
 
-export  function Select<T extends SelectDataType>(props: {label: string, data: T, click:(arg0: T)=>void, value: T}&React.ComponentProps<'div'>) {
+export  function Select<T extends SelectDataType>(props: {label: string, data: T[], click:(arg0: T)=>void, value: T}&React.ComponentProps<'div'>) {
   const { label, click, ...other } = props;
   const [value, setValue] = useState(props.value);
   const [showItem, setShow] = useState(false);
@@ -25,7 +25,7 @@ export  function Select<T extends SelectDataType>(props: {label: string, data: T
     setValue(e);
     setShow(false);
   };
-  const [selectItems, setItems] = useState<T[]>([]);
+  const [selectItems, setItems] = useState<T[]>(props.data);
   useEffect(() => {
     if (showItem)
       (async () => {

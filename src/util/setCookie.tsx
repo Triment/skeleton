@@ -12,10 +12,10 @@ import { NextApiResponse } from 'next'
  * @param {CookieSerializeOptions} options 
  */
 export const setCookie = (
-  res,
-  name,
-  value,
-  options = {}
+  res: NextApiResponse,
+  name: string,
+  value: unknown,
+  options: CookieSerializeOptions = {}
 ) => {
   const stringValue =
     typeof value === 'object' ? 'j:' + JSON.stringify(value) : String(value)

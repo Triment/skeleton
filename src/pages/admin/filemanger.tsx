@@ -6,33 +6,18 @@ import { Progress } from '../../components/progress';
 import { host } from '../../config';
 import { useModal } from '../../dashboard/provider/model';
 import { PortalModal } from '../../util/Portal';
-//深度优先搜索中序遍历
-export const treeToLine = (file) => {
-  var result = [];
-  const dfs = (file, index, parent) => {
-    if (file.type === 'file') {
-      result.push({ ...file, index: index, fullpath: `${parent}${file.name}` });
-    } else {
-      result.push({ ...file, index: index, fullpath: `${parent}${file.name}` });
-      file.children.map((item) => {
-        dfs(item, index + 1, `${parent}${file.name}/`);
-      });
-    }
-  };
-  file.map((item) => dfs(item, 1, '/'));
-  //console.log(result)
-  return result;
-};
+import { NextPageContext } from 'next';
+import { FileItemType } from '../api/file/getfiles';
 
-export default function fileManger({ data }) {
+export default function fileManger({ data }: { data: FileItemType[] }) {
   //console.log(data)
   const { show } = useModal();
-  const [currentFileName, setDownloadName] = useState(); //modal显示文件名
+  const [currentFileName, setDownloadName] = useState<string>(); //modal显示文件名
   const [downloadProgress, setProgress] = useState(0); //下载进度
   const [rate, setRate] = useState(0);
   const controller = new AbortController();
   const { signal } = controller;
-  async function downloadFile(path) {
+  async function downloadFile(path: string) {
     let paths = path.split('/');
     var filename = paths[paths.length - 1];
     if (filename === currentFileName) {
@@ -45,15 +30,15 @@ export default function fileManger({ data }) {
     const response = await fetch(`/api/file/getfile?getPath=${path}`, {
       signal,
     });
-    const reader = response.body.getReader();
+    const reader = response!.body!.getReader();
     const contentLength = response.headers.get('Content-Length');
     const rate = response.headers.get('Rate');
     //console.log(contentLength, '内容大小')
     let receivedLength = 0;
-    let chunks = [];
+    let chunks: Uint8Array[]= new Array<Uint8Array>();
     var startLength = 0;
     const rateInterval = setInterval(() => {
-      const leng = 0;
+      let leng = 0;
       for (const chunk of chunks) {
         leng += chunk.length;
       }
@@ -67,7 +52,7 @@ export default function fileManger({ data }) {
       }
       chunks.push(value);
       receivedLength += value.length;
-      let prog = parseInt((receivedLength / contentLength) * 100);
+      let prog = ((receivedLength / parseInt(contentLength!)) * 100);
       prog === downloadProgress ? '' : setProgress(prog);
       //setProgress(prog===downloadProgress?)
     }
@@ -139,7 +124,7 @@ export default function fileManger({ data }) {
         >
           {item.type == 'folder' ? <FolderIcon /> : <FileIcon />}
           <span
-            onClick={
+            onClick={()=>
               item.type === 'file' ? () => downloadFile(item.fullpath) : null
             }
             className="pl-2 hover:text-yellow-500 cursor-pointer ease-in duration-300"
@@ -152,8 +137,8 @@ export default function fileManger({ data }) {
   );
 }
 
-export const getServerSideProps = async (ctx) => {
-  const data = await (await fetch(`${host.api}/file/getfiles`)).json();
+export const getServerSideProps = async (ctx: NextPageContext) => {
+  const data: FileItemType[] = await (await fetch(`${host.api}/file/getfiles`)).json();
   return {
     props: {
       data: data,

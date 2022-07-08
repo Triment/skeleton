@@ -9,15 +9,16 @@ import { CheckBox } from '../../../components/checkbox';
 import { Role, User } from '../../../database/model';
 import { NextPageContext } from 'next';
 
+type UserWithRole = Omit<User, 'role'> & { role: Role }
 //用户信息修改卡片
 
 type UserInfoType = {
-  data: SelectDataType,
-  User: Omit<User, 'role'> & { role: Role }  ,
-  setUser: (arg0: Omit<User, 'role'> & { role: Role }) => void
+  roles: SelectDataType[],
+  user: UserWithRole  ,
+  setUser: (arg0: UserWithRole) => void
 }
-const UserInfo = ({ data, User, setUser }: UserInfoType) => {
-  if (!User) return null;
+const UserInfo = ({ roles, user, setUser }: UserInfoType) => {
+  if (!user) return null;
   return (
     <div className="w-auto h-auto first:mt-4 last:mb-4">
       <Input
@@ -25,22 +26,22 @@ const UserInfo = ({ data, User, setUser }: UserInfoType) => {
         label="用户名"
         type="text"
         onChange={(e) => {
-          setUser({ ...User, username: e.target.value } as User);
+          setUser({ ...user, username: e.target.value });
         }}
-        value={User.username}
-        placeholder={User.username}
+        value={user.username}
+        placeholder={user.username}
       />
       <Select
-        data={data}
+        data={roles}
         className="my-4 "
         label="角色"
-        value={User.role!}
-        click={(role) => setUser({ ...User, role: role })}
+        value={user.role!}
+        click={(role) => setUser({ ...user, role: role } as UserWithRole)}
       />
       <CheckBox
-        enable={User.active}
+        enable={user.active}
         label="激活"
-        click={(e) => setUser({ ...User, active: e })}
+        click={(e) => setUser({ ...user, active: e })}
       />
 
       <Input
@@ -48,10 +49,10 @@ const UserInfo = ({ data, User, setUser }: UserInfoType) => {
         label="email"
         type="text"
         onChange={(e) => {
-          setUser(User);
+          setUser(user);
         }}
-        value={User.email}
-        placeholder={User.email}
+        value={user.email}
+        placeholder={user.email}
       />
       <div className="flex justify-between">
         <div className="pointer-events-auto m-8 rounded-md bg-indigo-600 py-2 px-3 text-[0.8125rem] font-semibold leading-5 text-center text-white hover:bg-indigo-500">
@@ -67,22 +68,13 @@ const UserInfo = ({ data, User, setUser }: UserInfoType) => {
   );
 };
 
-export default function MangerUser({ users }: { users: User[] }) {
+export default function MangerUser({ users, roles }: { users: UserWithRole[], roles: Role[] }) {
   const { show } = useModal();
-  const [currentUser, setUser] = useState<User>();
-  const [roles, setRoles] = useState<Role[]>([])
-
-  useEffect(() => {
-    (async () => {
-      setRoles(await (await fetch(`${host.api}/auth/role/all`)).json())
-    })()
-  }, [currentUser, roles.length])
+  const [currentUser, setUser] = useState<UserWithRole>();
   return (
     <div className="shadow-sm rounded-2xl w-min p-4 bg-white overflow-hidden my-8">
       <PortalModal>
-        <Context.Provider value={{ User: currentUser!, setUser: setUser }}>
-          <UserInfo />
-        </Context.Provider>
+          <UserInfo roles={roles} user={currentUser!} setUser={setUser} />
       </PortalModal>
       <table className="border-collapse table-auto text-sm">
         <thead>
@@ -123,7 +115,7 @@ export default function MangerUser({ users }: { users: User[] }) {
                 </div>
               </td>
               <td className="border-b border-slate-100 dark:border-slate-700 p-4 pr-8 text-slate-500 dark:text-slate-400">
-                {item.role}
+                {item.role.raw}
               </td>
               <td className="whitespace-nowrap border-b border-slate-100 dark:border-slate-700 p-4 pr-8 text-slate-500 dark:text-slate-400">
                 {item.active ? (
@@ -155,10 +147,12 @@ export default function MangerUser({ users }: { users: User[] }) {
 }
 
 export const getServerSideProps = async (ctx: NextPageContext) => {
-  const users: User[] = await (await fetch(`${host.api}/user/all`)).json();
+  const users: User[] = await (await fetch(`${host.api}/user/all`)).json();//获取用户
+  const roles: Role[] = await (await fetch(`${host.api}/auth/role/all`)).json();//获取角色
   return {
     props: {
       users: users,
+      roles: roles
     },
   };
 };

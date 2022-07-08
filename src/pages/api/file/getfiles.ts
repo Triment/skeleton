@@ -6,6 +6,15 @@ import { config as globalConfig } from '../../../config';
 export const getFileFolder = () => {
   return globalConfig.fileServerPath;
 };
+
+//
+export type FileItemType = {
+  name: string,
+  type: string,
+  children: FileItemType,
+  fullpath: string,
+  index: number,
+}
 //先序遍历文件夹
 const dfs = (p: string) => {
   if (!p) return;

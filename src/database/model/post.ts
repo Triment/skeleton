@@ -24,7 +24,7 @@ class Post {
 
   @Column('simple-array', { select: true, nullable: true })
   @OneToMany(() => Comment, (comment) => comment.post)
-  comments = [];
+  comments = undefined;
 }
 
 export { Post };
