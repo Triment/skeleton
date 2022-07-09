@@ -53,28 +53,16 @@ class User {
   email:string;
 
   @JoinTable()
-  @Column({
-    default: null
-  })
   @ManyToOne(() => Role, (role) => role.users)
   role: Role;
 
   @Column('simple-array', { select: false, nullable: true })
-  @Column({
-    default: []
-  })
   @OneToMany(() => Post, (post) => post.author)
-  @Column({
-    default: []
-  })
-  posts: Post[] | undefined;
+  posts!: Post[];
 
   @Column('simple-array', { select: false, nullable: true })
-  @Column({
-    default: []
-  })
   @OneToMany(() => Comment, (comment) => comment.author)
-  comments: Comment[] | undefined;
+  comments!: Comment[];
 
   @BeforeInsert()
   async hashPassword() {

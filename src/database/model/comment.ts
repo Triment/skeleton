@@ -19,12 +19,10 @@ class Comment {
   disapproving: number | undefined;
 
   @ManyToOne(() => User, (user) => user.comments)
-  @Column({
-    default: null
-  })
-  author: User | undefined;
+  author!: User;
+  
   @ManyToOne(() => Post, (post) => post.comments)
-  post: Post | undefined;
+  post!: Post;
 }
 
 export { Comment };

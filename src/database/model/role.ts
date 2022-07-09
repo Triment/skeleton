@@ -28,8 +28,9 @@ class Menu {
   @Column('varchar')
   link: string;
 
+  @Column('simple-array')
   @ManyToOne(() => Role, (role) => role.menus)
-  roles!: Relation<Role>;
+  roles!: Role[];
 }
 
 @Entity()
@@ -43,18 +44,14 @@ class Role {
   @Column('varchar')
   raw: string;
 
+  @Column('simple-array')
   @OneToMany(() => User, (user) => user.role)
-  @Column({
-    default: []
-  })
-  users: User|undefined;
+  users!: User[];
 
   @JoinTable()
+  @Column('simple-array')
   @OneToMany(() => Menu, (menu) => menu.roles)
-  @Column({
-    default: []
-  })
-  menus!: Relation<Menu>[];
+  menus!: Menu[];
 }
 
 export { Role, Menu };

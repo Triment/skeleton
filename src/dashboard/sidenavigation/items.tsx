@@ -3,6 +3,7 @@ import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { host } from '../../config';
 import { Menu } from '../../database/model';
+import useUser from '../../lib/useUser';
 
 import data from './data';
 import FolderIcon from './icons/folder';
@@ -15,21 +16,11 @@ const style = {
 
 export default function SidenavItems() {
   const { asPath } = useRouter();
-  const [menus, setMenus] = useState([]);
-  useEffect(() => {
-    if (menus.length === 0)
-      (async () => {
-        await fetch(`${host.api}/auth/getmenu`)
-          .then((res) => res.json())
-          .then((data) => {
-            setMenus(data);
-          });
-      })();
-  }, [menus.length]);
+  const { user, mutateUser } = useUser()
   return (
     <ul>
       <li>
-        {menus.map((item: Menu) => (
+        {user?.role.menus.map((item: Menu) => (
           <Link href={item.link} key={item.title}>
             <a
               className={`${style.link} 

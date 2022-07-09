@@ -20,14 +20,11 @@ class Post {
   content: String | undefined;
 
   @ManyToOne(() => User, (author) => author.posts)
-  @Column({
-    default: null
-  })
-  author: User | undefined;
+  author!: User;
 
-  @Column('simple-array', { select: true, nullable: true })
+  @Column('simple-array',{ select: true, nullable: true })
   @OneToMany(() => Comment, (comment) => comment.post)
-  comments: Comment[] = [];
+  comments!: Comment[];
 }
 
 export { Post };
