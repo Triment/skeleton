@@ -1,7 +1,13 @@
+import fetchJson from '../../lib/fetchJson';
+import useUser from '../../lib/useUser';
 import { useToggle } from '../provider/context';
 
 export default function TopNavigation() {
   const { toggle } = useToggle();
+  const { mutateUser } = useUser({
+    redirectTo: '/',
+    redirectIfFound: true
+  })
   return (
     <header className="bg-white h-16 items-center relative shadow w-full z-10 md:h-20 lg:rounded-2xl">
       <div className="flex flex-center flex-col h-full justify-center mx-auto px-3 relative">
@@ -49,7 +55,14 @@ export default function TopNavigation() {
               </div>
             </div>
           </div>
-          <div className="flex items-center justify-end ml-5 p-1 relative w-1/4 sm:mr-0 sm:right-auto">
+          <div 
+           onClick={async(e)=>{
+            e.preventDefault()
+            mutateUser(await fetchJson('/api/auth/logout', {
+              method: 'POST'
+            }), false)
+           }}
+           className="flex items-center justify-end ml-5 p-1 relative w-1/4 sm:mr-0 sm:right-auto">
             <a href="#" className="block relative">
               <img
                 alt="Jonathan Ilunga"

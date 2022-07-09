@@ -17,6 +17,6 @@
     "jsx": "preserve",
     "incremental": true
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "src/index.js"],
+  "include": ["next-env.d.ts", "iron-session.d.ts", "**/*.ts", "**/*.tsx", "src/index.js"],
   "exclude": ["node_modules"]
 }

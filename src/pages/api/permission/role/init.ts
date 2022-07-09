@@ -1,8 +1,9 @@
+import { NextApiRequest, NextApiResponse } from 'next';
 import { DataBase } from '../../../../database';
 import { Menu, Role, User } from '../../../../database/model';
 import { withDB } from '../../../../util/ApiWrapper';
 
-const handler = async (req, res) => {
+const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   const loginPage = new Menu('登录', 'folder', '/auth/login');
   const homePage = new Menu('主页', 'home', '/');
   const fileDown = new Menu('文件下载', 'folder', '/admin/filemanger');

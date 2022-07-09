@@ -24,42 +24,57 @@ class User {
     password: string,
     active: boolean,
     email: string,
+    role: Role
   ) {
     this.username = username;
     this.password = password;
     this.active = active;
     this.email = email;
-    //this.role = new Role('admin')
+    this.role = role
   }
 
   @PrimaryGeneratedColumn('uuid')
-  id = undefined;
+  id: string | undefined;
 
   @Column('varchar')
-  username = '';
+  username: string;
 
   @Column('varchar', {
     select: false,
   })
-  password = '';
+  password: string;
 
-  @Column('boolean')
-  active = false;
+  @Column('boolean',{
+    default: true
+  })
+  active:boolean;
 
   @Column('varchar')
-  email = '';
+  email:string;
 
   @JoinTable()
+  @Column({
+    default: null
+  })
   @ManyToOne(() => Role, (role) => role.users)
-  role = undefined;
+  role: Role;
 
   @Column('simple-array', { select: false, nullable: true })
+  @Column({
+    default: []
+  })
   @OneToMany(() => Post, (post) => post.author)
-  posts = undefined;
+  @Column({
+    default: []
+  })
+  posts: Post[] | undefined;
 
   @Column('simple-array', { select: false, nullable: true })
+  @Column({
+    default: []
+  })
   @OneToMany(() => Comment, (comment) => comment.author)
-  comments = undefined;
+  comments: Comment[] | undefined;
 
   @BeforeInsert()
   async hashPassword() {

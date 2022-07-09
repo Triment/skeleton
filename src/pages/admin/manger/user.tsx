@@ -8,14 +8,14 @@ import { Input, Select, SelectDataType } from '../../../components/input';
 import { CheckBox } from '../../../components/checkbox';
 import { Role, User } from '../../../database/model';
 import { NextPageContext } from 'next';
+import { UserType } from '../../../redux/userSlice';
 
-type UserWithRole = Omit<User, 'role'> & { role: Role };
 //用户信息修改卡片
 
 type UserInfoType = {
   roles: SelectDataType[];
-  user: UserWithRole;
-  setUser: (arg0: UserWithRole) => void;
+  user: UserType;
+  setUser: (arg0: UserType) => void;
 };
 const UserInfo = ({ roles, user, setUser }: UserInfoType) => {
   if (!user) return null;
@@ -36,7 +36,7 @@ const UserInfo = ({ roles, user, setUser }: UserInfoType) => {
         className="my-4 "
         label="角色"
         value={user.role!}
-        click={(role) => setUser({ ...user, role: role } as UserWithRole)}
+        click={(role) => setUser({ ...user, role: role } as UserType)}
       />
       <CheckBox
         enable={user.active}
@@ -72,11 +72,11 @@ export default function MangerUser({
   users,
   roles,
 }: {
-  users: UserWithRole[];
+  users: UserType[];
   roles: Role[];
 }) {
   const { show } = useModal();
-  const [currentUser, setUser] = useState<UserWithRole>();
+  const [currentUser, setUser] = useState<UserType>();
   return (
     <div className="shadow-sm rounded-2xl w-min p-4 bg-white overflow-hidden my-8">
       <PortalModal>
@@ -155,6 +155,7 @@ export default function MangerUser({
 export const getServerSideProps = async (ctx: NextPageContext) => {
   const users: User[] = await (await fetch(`${host.api}/user/all`)).json(); //获取用户
   const roles: Role[] = await (await fetch(`${host.api}/auth/role/all`)).json(); //获取角色
+  console.log(users)
   return {
     props: {
       users: users,

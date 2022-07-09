@@ -5,6 +5,7 @@ import {
   ManyToOne,
   OneToMany,
   JoinTable,
+  Relation,
 } from 'typeorm';
 import { User } from './user';
 
@@ -16,19 +17,19 @@ class Menu {
     this.link = link;
   }
   @PrimaryGeneratedColumn('uuid')
-  id = undefined;
+  id: string | undefined;
 
   @Column('varchar')
-  title = '';
+  title: string;
 
   @Column('varchar')
-  icon = '';
+  icon: string;
 
   @Column('varchar')
-  link = '';
+  link: string;
 
   @ManyToOne(() => Role, (role) => role.menus)
-  roles = undefined;
+  roles!: Relation<Role>;
 }
 
 @Entity()
@@ -37,17 +38,23 @@ class Role {
     this.raw = name;
   }
   @PrimaryGeneratedColumn('uuid')
-  id = undefined;
+  id: string|undefined;
 
   @Column('varchar')
-  raw = '';
+  raw: string;
 
   @OneToMany(() => User, (user) => user.role)
-  users = undefined;
+  @Column({
+    default: []
+  })
+  users: User|undefined;
 
   @JoinTable()
   @OneToMany(() => Menu, (menu) => menu.roles)
-  menus = undefined;
+  @Column({
+    default: []
+  })
+  menus!: Relation<Menu>[];
 }
 
 export { Role, Menu };

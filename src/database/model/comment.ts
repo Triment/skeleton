@@ -7,16 +7,24 @@ class Comment {
   id = undefined;
 
   @Column('text')
-  content = '';
-  @Column('int')
-  approved = 0;
-  @Column('int')
-  disapproving = 0;
+  content: string | undefined;
+  @Column('int', {
+    default: 0
+  })
+  approved: number | undefined;
+
+  @Column('int', {
+    default: 0
+  })
+  disapproving: number | undefined;
 
   @ManyToOne(() => User, (user) => user.comments)
-  author = undefined;
+  @Column({
+    default: null
+  })
+  author: User | undefined;
   @ManyToOne(() => Post, (post) => post.comments)
-  post = undefined;
+  post: Post | undefined;
 }
 
 export { Comment };

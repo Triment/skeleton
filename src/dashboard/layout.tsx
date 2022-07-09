@@ -6,10 +6,10 @@ import { useToggle } from './provider/context';
 import { useModal } from './provider/modal';
 import { useRouter } from 'next/router';
 import { ComponentProps } from 'react';
-import { useSelector } from 'react-redux';
-import { GlobalStore } from '../redux/store';
-import { User } from '../database/model';
 import { Login } from '../components/auth/Login';
+import { withSessionSsr } from '../lib/withSession';
+import { host } from '../config';
+import useUser from '../lib/useUser';
 /*	w-[calc(100%-16rem)] class get the remain width of the main component from lg:viewport by subtracting
 (the total width by the width of the side navigation component which is w-64 = 16rem)*/
 
@@ -23,23 +23,23 @@ const style = {
 
 const publicMenus = ['/', '/auth/login'];
 
-export default function DashboardLayout({ children }: ComponentProps<'div'>) {
+function DashboardLayout({ children }: ComponentProps<'div'>) {
+  const { user, mutateUser } = useUser()
   const { open } = useToggle();
   const { modalOpen, refOfModal, show } = useModal();
 
   const { pathname } = useRouter();
-  const user = useSelector((state) => (state as GlobalStore).userInfo.user);
   let ok = false;
-  console.log(pathname);
+  console.log(user)
   publicMenus.map((item) => {
     //公共api
-    console.log(item, pathname);
     if (item === pathname) {
       ok = ok || true;
     }
   });
-  console.log(ok);
-  if (!!user) {
+  console.log(!!user)
+  if (!!user?.role) {
+    console.log(`进入遍历用户菜单`,user)
     user.role!.menus.map((item) => {
       if (item.link === pathname) {
         ok = ok || true;
@@ -47,11 +47,10 @@ export default function DashboardLayout({ children }: ComponentProps<'div'>) {
     });
   }
   // 获取
-  console.log(ok, 'test');
+  console.log(`${pathname} 是否通过${ok}`);
   if (ok) {
     //管理界面
     if (!!user) {
-      console.log('已登录');
       return (
         <div className={style.container}>
           <div
@@ -75,7 +74,7 @@ export default function DashboardLayout({ children }: ComponentProps<'div'>) {
               className={`${style.mainContainer} 
             ${open ? style.open : style.close}`}
             >
-              {/* <TopNavigation /> */}
+              {user && <TopNavigation /> }
               <Main className={style.main}>{children}</Main>
             </div>
           </div>
@@ -89,3 +88,18 @@ export default function DashboardLayout({ children }: ComponentProps<'div'>) {
     return <Login />;
   }
 }
+
+DashboardLayout.getServerSideProps = withSessionSsr(async ({req}) => {
+  const user = req.session.user
+  const data = await (await fetch(`${host.api}/auth/getmenu`)).json(); //公共api
+  // ctx.req.redirect(200, '/login/login')
+  //console.log(ctx.req)
+  console.log(user)
+  return {
+    props: {
+      user: user
+    }
+  };
+})
+
+export default DashboardLayout

@@ -4,9 +4,10 @@ import { aesEncrypt } from '../../../database/model/user';
 import { withDB } from '../../../util/ApiWrapper';
 import { sign, verify } from 'jsonwebtoken';
 import { config } from '../../../config';
-import { setCookie } from '../../../util/setCookie';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { readFileSync } from 'fs';
+import { UserStore, UserType } from '../../../redux/userSlice';
+import { withSessionRoute } from '../../../lib/withSession';
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   const { username, password } = JSON.parse(req.body);
   const queryUser = await DataBase.getRepository(User)
@@ -14,6 +15,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     .leftJoinAndSelect('user.role', 'role')
     .leftJoinAndSelect('role.menus', 'menus')
     .addSelect('user.password')
+    .addSelect('role.raw')
     .where('user.username = :username', { username: username })
     .getOne();
   // (User, {
@@ -26,10 +28,12 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     const token = sign(noPwData, readFileSync(config.tokenPrivateKey), {
       algorithm: 'RS256',
     });
-    setCookie(res, 'token', token, { maxAge: 60 * 60 * 24 }); //设置cookie保持1天
+    //setCookie(res, 'token', token, { maxAge: 60 * 60 * 24 }); //设置cookie保持1天
+    req.session.user = noPwData as unknown as UserType
+    await req.session.save()
     res.status(200).json({ user: noPwData });
     return;
   }
   res.status(401).json({ msg: '账号或密码错误' });
 };
-export default withDB(handler);
+export default withSessionRoute(withDB(handler));

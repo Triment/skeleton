@@ -1,3 +1,5 @@
+import { NextApiRequest, NextApiResponse } from "next";
+
 const allpost = [
   {
     id: 1,
@@ -7,7 +9,7 @@ const allpost = [
   },
 ];
 
-const handler = (req, res) => {
+const handler = (req: NextApiRequest, res: NextApiResponse) => {
   res.status(200).json(allpost);
 };
 export default handler;

@@ -2,12 +2,14 @@ import { createSlice } from '@reduxjs/toolkit';
 import { Menu, Role, User } from '../database/model';
 
 export interface UserStore {
-  user: Omit<User, 'role'> & {
-    role: Omit<Role, 'menus'> & {
-      menus: Menu[];
-    };
-  };
+  user: UserType
 }
+
+export type UserType = Omit<User, 'role'> & {
+  role: Omit<Role, 'menus'> & {
+    menus: Menu[];
+  };
+};
 
 export const userSlice = createSlice({
   name: 'counter',

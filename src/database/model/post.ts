@@ -11,20 +11,23 @@ import { User } from './user';
 @Entity()
 class Post {
   @PrimaryGeneratedColumn('uuid')
-  id = undefined;
+  id: String | undefined;
 
   @Column('text')
-  title = '';
+  title: String| undefined;
 
   @Column('text')
-  content = '';
+  content: String | undefined;
 
   @ManyToOne(() => User, (author) => author.posts)
-  author = undefined;
+  @Column({
+    default: null
+  })
+  author: User | undefined;
 
   @Column('simple-array', { select: true, nullable: true })
   @OneToMany(() => Comment, (comment) => comment.post)
-  comments = undefined;
+  comments: Comment[] = [];
 }
 
 export { Post };

@@ -1,27 +1,30 @@
 import { useState } from 'react';
-import { host } from '../../config';
-import { useModal } from '../../dashboard/provider/modal';
-import { login } from '../../redux/userSlice';
+import fetchJson from '../../lib/fetchJson';
+import useUser from '../../lib/useUser';
 
-export default function Login() {
+function Login() {
   const [username, setUserName] = useState('');
   const [password, setPassword] = useState('');
-  const { modalOpen } = useModal();
-  const submit = () => {
+  const { mutateUser } = useUser({
+    redirectTo: "/",
+    redirectIfFound: true
+  })
+  const submit = async() => {
     if (!username || !password) {
       console.log('请填写名字密码，缺一不可');
     } else {
-      fetch(`${host.api}/auth/login`, {
-        method: 'POST',
-        body: JSON.stringify({
-          username: username,
-          password: password,
+      try {
+        mutateUser(await fetchJson("/api/auth/login", {
+          method: 'POST',
+          body: JSON.stringify({
+            username: username,
+            password: password,
+          })
         }),
-      })
-        .then((res) => res.json())
-        .then((data) => {
-          login({ payload: data.user });
-        });
+        false)
+      } catch (err) {
+        console.log(`login`, err)
+      }
     }
   };
   return (
@@ -124,3 +127,17 @@ export default function Login() {
     </div>
   );
 }
+// export const getServerSideProps = withSessionSsr(async ({req}) => {
+//   const user = req.session.user
+//   const data = await (await fetch(`${host.api}/auth/getmenu`)).json(); //公共api
+//   // ctx.req.redirect(200, '/login/login')
+//   //console.log(ctx.req)
+//   console.log(`userss`,user)
+//   return {
+//     props: {
+//       user: user
+//     }
+//   };
+// })
+
+export default Login

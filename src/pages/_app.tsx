@@ -5,9 +5,9 @@ import DashboardProvider from '../dashboard/provider/context';
 import ModelProvider from '../dashboard/provider/modal';
 import { Provider } from 'react-redux';
 import store from '../redux/store';
-import { host } from '../config';
-import { AppContext, AppInitialProps, AppProps } from 'next/app';
-import { NextApiRequest, NextApiResponse } from 'next';
+import { AppProps } from 'next/app';
+import { SWRConfig } from 'swr'
+import fetchJson from '../lib/fetchJson';
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
@@ -15,24 +15,22 @@ function MyApp({ Component, pageProps }: AppProps) {
       <Head>
         <title>selekton</title>
       </Head>
-      <Provider store={store}>
-        <DashboardProvider>
-          <ModelProvider>
-            <DashboardLayout>
-              <Component {...pageProps} />
-            </DashboardLayout>
-          </ModelProvider>
-        </DashboardProvider>
-      </Provider>
+      <SWRConfig
+              value={{
+                fetcher: fetchJson,
+                onError: (err)=>console.log(err)
+              }}>
+        <Provider store={store}>
+          <DashboardProvider>
+            <ModelProvider>
+              <DashboardLayout>
+                <Component {...pageProps} />
+              </DashboardLayout>
+            </ModelProvider>
+          </DashboardProvider>
+        </Provider>
+      </SWRConfig>
     </>
   );
 }
-MyApp.getInitialProps = async ({
-  ctx,
-}: AppContext & { ctx: { req: NextApiRequest; res: NextApiResponse } }) => {
-  const data = await (await fetch(`${host.api}/auth/getmenu`)).json(); //公共api
-  // ctx.req.redirect(200, '/login/login')
-  console.log(data);
-  return { PublicMenu: data };
-};
 export default MyApp;
