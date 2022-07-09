@@ -6,24 +6,26 @@ function Login() {
   const [username, setUserName] = useState('');
   const [password, setPassword] = useState('');
   const { mutateUser } = useUser({
-    redirectTo: "/",
-    redirectIfFound: true
-  })
-  const submit = async() => {
+    redirectTo: '/',
+    redirectIfFound: true,
+  });
+  const submit = async () => {
     if (!username || !password) {
       console.log('请填写名字密码，缺一不可');
     } else {
       try {
-        mutateUser(await fetchJson("/api/auth/login", {
-          method: 'POST',
-          body: JSON.stringify({
-            username: username,
-            password: password,
-          })
-        }),
-        false)
+        mutateUser(
+          await fetchJson('/api/auth/login', {
+            method: 'POST',
+            body: JSON.stringify({
+              username: username,
+              password: password,
+            }),
+          }),
+          false,
+        );
       } catch (err) {
-        console.log(`login`, err)
+        console.log(`login`, err);
       }
     }
   };
@@ -140,4 +142,4 @@ function Login() {
 //   };
 // })
 
-export default Login
+export default Login;

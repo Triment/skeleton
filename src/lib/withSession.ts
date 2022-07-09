@@ -1,10 +1,10 @@
-import { withIronSessionApiRoute, withIronSessionSsr } from "iron-session/next";
+import { withIronSessionApiRoute, withIronSessionSsr } from 'iron-session/next';
 import {
   GetServerSidePropsContext,
   GetServerSidePropsResult,
   NextApiHandler,
-} from "next";
-import { config } from "../config";
+} from 'next';
+import { config } from '../config';
 
 const sessionOptions = {
   password: config.sessionConfig.password,

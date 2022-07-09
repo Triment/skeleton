@@ -14,7 +14,13 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   await DataBase.manager.save(loginPage);
   await DataBase.manager.save(homePage);
   await DataBase.manager.save(adminMange);
-  const user = new User('admin', 'admin@cd123', true, '13198898368@163.com', role);
+  const user = new User(
+    'admin',
+    'admin@cd123',
+    true,
+    '13198898368@163.com',
+    role,
+  );
   user.role = role;
   await DataBase.manager.save(role);
   res.status(200).json(await DataBase.manager.save(user));

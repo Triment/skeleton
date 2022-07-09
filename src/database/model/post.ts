@@ -14,7 +14,7 @@ class Post {
   id: String | undefined;
 
   @Column('text')
-  title: String| undefined;
+  title: String | undefined;
 
   @Column('text')
   content: String | undefined;
@@ -22,7 +22,7 @@ class Post {
   @ManyToOne(() => User, (author) => author.posts)
   author!: User;
 
-  @Column('simple-array',{ select: true, nullable: true })
+  @Column('simple-array', { select: true, nullable: true })
   @OneToMany(() => Comment, (comment) => comment.post)
   comments!: Comment[];
 }

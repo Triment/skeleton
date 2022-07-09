@@ -155,7 +155,7 @@ export default function MangerUser({
 export const getServerSideProps = async (ctx: NextPageContext) => {
   const users: User[] = await (await fetch(`${host.api}/user/all`)).json(); //获取用户
   const roles: Role[] = await (await fetch(`${host.api}/auth/role/all`)).json(); //获取角色
-  console.log(users)
+  console.log(users);
   return {
     props: {
       users: users,

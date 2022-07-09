@@ -29,8 +29,8 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       algorithm: 'RS256',
     });
     //setCookie(res, 'token', token, { maxAge: 60 * 60 * 24 }); //设置cookie保持1天
-    req.session.user = noPwData as unknown as UserType
-    await req.session.save()
+    req.session.user = noPwData as unknown as UserType;
+    await req.session.save();
     res.status(200).json({ user: noPwData });
     return;
   }

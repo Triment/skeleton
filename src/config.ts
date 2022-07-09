@@ -11,7 +11,7 @@ export const config = {
     cookieName: 'app_user',
     cookieOptions: {
       secure: false,
-    }
+    },
   },
   databaseConfig: {
     username: 'admin',

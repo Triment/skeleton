@@ -9,18 +9,18 @@ class Comment {
   @Column('text')
   content: string | undefined;
   @Column('int', {
-    default: 0
+    default: 0,
   })
   approved: number | undefined;
 
   @Column('int', {
-    default: 0
+    default: 0,
   })
   disapproving: number | undefined;
 
   @ManyToOne(() => User, (user) => user.comments)
   author!: User;
-  
+
   @ManyToOne(() => Post, (post) => post.comments)
   post!: Post;
 }

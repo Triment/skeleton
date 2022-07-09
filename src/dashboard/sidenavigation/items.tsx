@@ -16,7 +16,7 @@ const style = {
 
 export default function SidenavItems() {
   const { asPath } = useRouter();
-  const { user, mutateUser } = useUser()
+  const { user, mutateUser } = useUser();
   return (
     <ul>
       <li>

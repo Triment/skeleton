@@ -24,22 +24,22 @@ const style = {
 const publicMenus = ['/', '/auth/login'];
 
 function DashboardLayout({ children }: ComponentProps<'div'>) {
-  const { user, mutateUser } = useUser()
+  const { user, mutateUser } = useUser();
   const { open } = useToggle();
   const { modalOpen, refOfModal, show } = useModal();
 
   const { pathname } = useRouter();
   let ok = false;
-  console.log(user)
+  console.log(user);
   publicMenus.map((item) => {
     //公共api
     if (item === pathname) {
       ok = ok || true;
     }
   });
-  console.log(!!user)
+  console.log(!!user);
   if (!!user?.role) {
-    console.log(`进入遍历用户菜单`,user)
+    console.log(`进入遍历用户菜单`, user);
     user.role!.menus.map((item) => {
       if (item.link === pathname) {
         ok = ok || true;
@@ -74,7 +74,7 @@ function DashboardLayout({ children }: ComponentProps<'div'>) {
               className={`${style.mainContainer} 
             ${open ? style.open : style.close}`}
             >
-              {user && <TopNavigation /> }
+              {user && <TopNavigation />}
               <Main className={style.main}>{children}</Main>
             </div>
           </div>
@@ -89,17 +89,17 @@ function DashboardLayout({ children }: ComponentProps<'div'>) {
   }
 }
 
-DashboardLayout.getServerSideProps = withSessionSsr(async ({req}) => {
-  const user = req.session.user
+DashboardLayout.getServerSideProps = withSessionSsr(async ({ req }) => {
+  const user = req.session.user;
   const data = await (await fetch(`${host.api}/auth/getmenu`)).json(); //公共api
   // ctx.req.redirect(200, '/login/login')
   //console.log(ctx.req)
-  console.log(user)
+  console.log(user);
   return {
     props: {
-      user: user
-    }
+      user: user,
+    },
   };
-})
+});
 
-export default DashboardLayout
+export default DashboardLayout;

@@ -39,7 +39,7 @@ class Role {
     this.raw = name;
   }
   @PrimaryGeneratedColumn('uuid')
-  id: string|undefined;
+  id: string | undefined;
 
   @Column('varchar')
   raw: string;

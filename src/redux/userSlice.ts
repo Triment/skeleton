@@ -2,7 +2,7 @@ import { createSlice } from '@reduxjs/toolkit';
 import { Menu, Role, User } from '../database/model';
 
 export interface UserStore {
-  user: UserType
+  user: UserType;
 }
 
 export type UserType = Omit<User, 'role'> & {

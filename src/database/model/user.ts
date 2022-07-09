@@ -24,13 +24,13 @@ class User {
     password: string,
     active: boolean,
     email: string,
-    role: Role
+    role: Role,
   ) {
     this.username = username;
     this.password = password;
     this.active = active;
     this.email = email;
-    this.role = role
+    this.role = role;
   }
 
   @PrimaryGeneratedColumn('uuid')
@@ -44,13 +44,13 @@ class User {
   })
   password: string;
 
-  @Column('boolean',{
-    default: true
+  @Column('boolean', {
+    default: true,
   })
-  active:boolean;
+  active: boolean;
 
   @Column('varchar')
-  email:string;
+  email: string;
 
   @JoinTable()
   @ManyToOne(() => Role, (role) => role.users)
