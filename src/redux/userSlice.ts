@@ -8,6 +8,7 @@ export interface UserStore {
 export type UserType = Omit<User, 'role'> & {
   role: Omit<Role, 'menus'> & {
     menus: Menu[];
+    bandwidth: number
   };
 };
 

@@ -44,6 +44,11 @@ class Role {
   @Column('varchar')
   raw: string;
 
+  @Column('int', {
+    default: 512
+  })
+  bandwidth!: number;
+
   @Column('simple-array')
   @OneToMany(() => User, (user) => user.role)
   users!: User[];

@@ -27,9 +27,9 @@ export default function useUser({
        * 或者重定向&&用户 存在
        */
       // If redirectTo is set, redirect if the user was not found.
-      (redirectTo && !redirectIfFound && !user) ||
+      (redirectTo && !redirectIfFound && user.role.raw === 'guest') ||
       // If redirectIfFound is also set, redirect if the user was found
-      (redirectIfFound && !!user)
+      (redirectIfFound && user.role && user.role.raw != 'guest')
     ) {
       Router.push(redirectTo);
     }

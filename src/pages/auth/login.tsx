@@ -22,7 +22,7 @@ function Login() {
               password: password,
             }),
           }),
-          false,
+          true,
         );
       } catch (err) {
         console.log(`login`, err);

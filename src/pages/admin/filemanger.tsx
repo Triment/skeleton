@@ -8,15 +8,17 @@ import { useModal } from '../../dashboard/provider/modal';
 import { PortalModal } from '../../util/Portal';
 import { NextPageContext } from 'next';
 import { FileItemType } from '../api/file/getfiles';
+import useUser from '../../lib/useUser';
 
 export default function fileManger({ data }: { data: FileItemType[] }) {
   //console.log(data)
-  const { show } = useModal();
+  const { show, refOfModal } = useModal();
   const [currentFileName, setDownloadName] = useState<string>(); //modal显示文件名
   const [downloadProgress, setProgress] = useState(0); //下载进度
   const [rate, setRate] = useState(0);
   const controller = new AbortController();
   const { signal } = controller;
+  const { user } = useUser()
   async function downloadFile(path: string) {
     let paths = path.split('/');
     var filename = paths[paths.length - 1];
@@ -32,19 +34,17 @@ export default function fileManger({ data }: { data: FileItemType[] }) {
     });
     const reader = response!.body!.getReader();
     const contentLength = response.headers.get('Content-Length');
-    const rate = response.headers.get('Rate');
+    console.log(refOfModal.current)
     //console.log(contentLength, '内容大小')
     let receivedLength = 0;
     let chunks: Uint8Array[] = new Array<Uint8Array>();
     var startLength = 0;
     const rateInterval = setInterval(() => {
-      let leng = 0;
-      for (const chunk of chunks) {
-        leng += chunk.length;
-      }
-      setRate(((leng - startLength) * 10) / 1024);
-      startLength = leng;
-    }, 100);
+      //速度和定时器的时间有关系这里是0.5s 所以应当乘以二得到秒速
+      setRate(((receivedLength - startLength)*4) / 1024);
+      console.log()
+      startLength = receivedLength;
+    }, 250);
     while (true) {
       const { done, value } = await reader.read();
       if (done) {
@@ -74,47 +74,44 @@ export default function fileManger({ data }: { data: FileItemType[] }) {
   }
 
   return (
-    <div className="w-full shadow-lg rounded-2xl bg-white p-4">
+    <div className="w-ful h-full overflow-y-auto shadow-lg rounded-2xl bg-white p-4">
       {/* 下载进度条 */}
       <PortalModal>
-        <div className="flex flex-col">
-          <span>{currentFileName}</span>
-          <span>
-            {rate > 1024
-              ? rate > 1024 * 1024
-                ? `${rate / (1024 * 1024)}Gb`
-                : `${rate / 1024}Mb`
-              : `${rate}Kb`}
-            /s
-          </span>
-          <Progress state={downloadProgress} />
+            <p>{currentFileName}</p>
+            <span>
+              {rate > 1024
+                ? rate > 1024 * 1024
+                  ? `${rate / (1024 * 1024)}Gb`
+                  : `${rate / 1024}Mb`
+                : `${rate}Kb`}
+              /s
+            </span>
+            <Progress state={downloadProgress} />
 
-          <div className={`mt-4 flex justify-center`}>
-            {downloadProgress != 100 ? (
-              ''
-            ) : (
-              <div
-                className={`${
-                  downloadProgress == 100 ? 'opacity-100' : 'opacity-0'
-                }`}
-              >
-                下载完成
-                <svg
-                  width="20"
-                  height="20"
-                  fill="currentColor"
-                  viewBox="0 0 1024 1024"
-                  className={`text-green-500 mx-4 ease-in-out duration-300 `}
+            <div className={`mt-4 flex justify-center`}>
+              {downloadProgress != 100 ? (
+                ''
+              ) : (
+                <div
+                  className={`${downloadProgress == 100 ? 'opacity-100' : 'opacity-0'
+                    }`}
                 >
-                  <path
-                    d="M512 64C264.6 64 64 264.6 64 512s200.6 448 448 448s448-200.6 448-448S759.4 64 512 64zm193.5 301.7l-210.6 292a31.8 31.8 0 0 1-51.7 0L318.5 484.9c-3.8-5.3 0-12.7 6.5-12.7h46.9c10.2 0 19.9 4.9 25.9 13.3l71.2 98.8l157.2-218c6-8.3 15.6-13.3 25.9-13.3H699c6.5 0 10.3 7.4 6.5 12.7z"
+                  下载完成
+                  <svg
+                    width="20"
+                    height="20"
                     fill="currentColor"
-                  />
-                </svg>
-              </div>
-            )}
-          </div>
-        </div>
+                    viewBox="0 0 1024 1024"
+                    className={`text-green-500 mx-4 ease-in-out duration-300 `}
+                  >
+                    <path
+                      d="M512 64C264.6 64 64 264.6 64 512s200.6 448 448 448s448-200.6 448-448S759.4 64 512 64zm193.5 301.7l-210.6 292a31.8 31.8 0 0 1-51.7 0L318.5 484.9c-3.8-5.3 0-12.7 6.5-12.7h46.9c10.2 0 19.9 4.9 25.9 13.3l71.2 98.8l157.2-218c6-8.3 15.6-13.3 25.9-13.3H699c6.5 0 10.3 7.4 6.5 12.7z"
+                      fill="currentColor"
+                    />
+                  </svg>
+                </div>
+              )}
+            </div>
       </PortalModal>
       {data.map((item, index) => (
         <div
@@ -124,8 +121,10 @@ export default function fileManger({ data }: { data: FileItemType[] }) {
         >
           {item.type == 'folder' ? <FolderIcon /> : <FileIcon />}
           <span
-            onClick={() =>
-              item.type === 'file' ? () => downloadFile(item.fullpath) : null
+            onClick={() => {
+              console.log(item)
+              item.type === 'file' ? downloadFile(item.fullpath) : null
+            }
             }
             className="pl-2 hover:text-yellow-500 cursor-pointer ease-in duration-300"
           >

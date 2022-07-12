@@ -17,10 +17,13 @@ const style = {
 export default function SidenavItems() {
   const { asPath } = useRouter();
   const { user, mutateUser } = useUser();
+  useEffect(()=>{
+    console.log(user)
+  })
   return (
     <ul>
       <li>
-        {user?.role.menus.map((item: Menu) => (
+        {user&&user.role&&user?.role.menus.map((item: Menu) => (
           <Link href={item.link} key={item.title}>
             <a
               className={`${style.link} 

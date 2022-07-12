@@ -16,6 +16,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     .leftJoinAndSelect('role.menus', 'menus')
     .addSelect('user.password')
     .addSelect('role.raw')
+    .addSelect('role.bandwidth')
     .where('user.username = :username', { username: username })
     .getOne();
   // (User, {

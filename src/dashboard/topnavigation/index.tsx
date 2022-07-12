@@ -1,13 +1,15 @@
+import { useRouter } from 'next/router';
 import fetchJson from '../../lib/fetchJson';
 import useUser from '../../lib/useUser';
 import { useToggle } from '../provider/context';
 
 export default function TopNavigation() {
   const { toggle } = useToggle();
-  const { mutateUser } = useUser({
+  const { user, mutateUser } = useUser({
     redirectTo: '/',
     redirectIfFound: true,
   });
+  const router = useRouter()
   return (
     <header className="bg-white h-16 items-center relative shadow w-full z-10 md:h-20 lg:rounded-2xl">
       <div className="flex flex-center flex-col h-full justify-center mx-auto px-3 relative">
@@ -64,17 +66,11 @@ export default function TopNavigation() {
                 }),
                 false,
               );
+              router.push('/admin/filemanger')
             }}
-            className="flex items-center justify-end ml-5 p-1 relative w-1/4 sm:mr-0 sm:right-auto"
+            className="flex cursor-pointer items-center justify-end ml-5 p-1 relative w-1/4 sm:mr-0 sm:right-auto"
           >
-            <a href="#" className="block relative">
-              <img
-                alt="Jonathan Ilunga"
-                src="https://res.cloudinary.com/beloved/image/upload/v1623599101/Assets/ilunga_xrvvfm.jpg"
-                className="h-10 mx-auto object-cover rounded-full w-10"
-              />
-            </a>
-          </div>
+            {user?.username+ ' '}登出          </div>
         </div>
       </div>
     </header>

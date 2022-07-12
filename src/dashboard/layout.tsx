@@ -24,7 +24,10 @@ const style = {
 const publicMenus = ['/', '/auth/login'];
 
 function DashboardLayout({ children }: ComponentProps<'div'>) {
-  const { user, mutateUser } = useUser();
+  const { user, mutateUser } = useUser({
+    redirectTo: '/',
+    redirectIfFound: true
+  });
   const { open } = useToggle();
   const { modalOpen, refOfModal, show } = useModal();
 
@@ -34,15 +37,17 @@ function DashboardLayout({ children }: ComponentProps<'div'>) {
   publicMenus.map((item) => {
     //公共api
     if (item === pathname) {
-      ok = ok || true;
+      ok = true;
+      return;
     }
   });
-  console.log(!!user);
+  console.log(ok, user);
   if (!!user?.role) {
     console.log(`进入遍历用户菜单`, user);
     user.role!.menus.map((item) => {
       if (item.link === pathname) {
-        ok = ok || true;
+        ok = true;
+        return;
       }
     });
   }
@@ -50,19 +55,19 @@ function DashboardLayout({ children }: ComponentProps<'div'>) {
   console.log(`${pathname} 是否通过${ok}`);
   if (ok) {
     //管理界面
-    if (!!user) {
+    console.log(user)
+    if (user?.role && user?.role.raw !== 'guest') {
       return (
         <div className={style.container}>
           <div
             onClick={() => show()}
-            className={`absolute justify-center w-full h-full ease-in duration-300 ${
-              modalOpen ? 'flex z-50' : 'hidden'
-            }`}
+            className={`absolute justify-center w-full h-full ease-in duration-300 ${modalOpen ? 'flex z-50' : 'hidden'
+              }`}
           >
             <div className={`flex-col flex justify-center`}>
               <div
                 onClick={() => console.log('model')}
-                className={`shadow-lg bg-white rounded-2xl p-4 dark:bg-gray-700 w-96 h-auto ease-in duration-300 `}
+                className={`shadow-lg bg-white rounded-2xl p-4 dark:bg-gray-700 w-96 h-36 ease-in duration-300 `}
                 ref={refOfModal}
               ></div>
             </div>
@@ -82,10 +87,20 @@ function DashboardLayout({ children }: ComponentProps<'div'>) {
       );
     }
     //对于匿名者显示界面
-    return <div className={style.container}>{children}</div>;
+    return <div className={style.container}>
+      <div className={`absolute inset-0 w-full justify-center flex-col ${modalOpen ? 'flex z-50' : 'hidden'}`} >
+        <div
+          onClick={() => console.log('model')}
+          className={`mx-auto flex flex-col shadow-lg bg-white rounded-2xl p-4 dark:bg-gray-700 w-96 h-36 ease-in duration-300 `}
+          ref={refOfModal}
+        ></div>
+      </div>
+      <div className={style.container + `${modalOpen ? ' blur-sm' : ''}`}>{children}</div>
+    </div>;
   } else {
     //不在公共api中的就返回登录
-    return <Login />;
+    // return <></>
+    return <Login ref={refOfModal} />;
   }
 }
 
