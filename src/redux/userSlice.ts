@@ -5,11 +5,12 @@ export interface UserStore {
   user: UserType;
 }
 
+export type RoleType = Omit<Role, 'menus'> & {
+  menus: Menu[];
+  bandwidth: number
+};
 export type UserType = Omit<User, 'role'> & {
-  role: Omit<Role, 'menus'> & {
-    menus: Menu[];
-    bandwidth: number
-  };
+  role: RoleType
 };
 
 export const userSlice = createSlice({

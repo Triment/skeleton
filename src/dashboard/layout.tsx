@@ -21,7 +21,7 @@ const style = {
   main: `h-screen overflow-auto pb-36 pt-8 px-2 md:pb-8 md:pt-4 lg:pt-0`,
 };
 
-const publicMenus = ['/', '/auth/login'];
+const publicMenus = ['/', '/auth/login', '/admin/manger/'];
 
 function DashboardLayout({ children }: ComponentProps<'div'>) {
   const { user, mutateUser } = useUser({
@@ -67,7 +67,7 @@ function DashboardLayout({ children }: ComponentProps<'div'>) {
             <div className={`flex-col flex justify-center`}>
               <div
                 onClick={() => console.log('model')}
-                className={`shadow-lg bg-white rounded-2xl p-4 dark:bg-gray-700 w-96 h-36 ease-in duration-300 `}
+                className={`dark:bg-gray-700 w-96 h-auto ease-in duration-300 `}
                 ref={refOfModal}
               ></div>
             </div>

@@ -6,73 +6,41 @@ import { PortalModal } from '../../../util/Portal';
 import { createContext, useContext, useEffect, useState } from 'react';
 import { Input, Select, SelectDataType } from '../../../components/input';
 import { CheckBox } from '../../../components/checkbox';
-import { Role, User } from '../../../database/model';
+import { Menu, Role, User } from '../../../database/model';
 import { NextPageContext } from 'next';
-import { UserType } from '../../../redux/userSlice';
+import { RoleType } from '../../../redux/userSlice';
+import { InsertValuesMissingError } from 'typeorm';
 
 //用户信息修改卡片
 
-type UserInfoType = {
-  roles: SelectDataType[];
-  user: UserType;
-  setUser: (arg0: UserType) => void;
+type RoleInfoType = {
+  menus: Menu[];
+  role: RoleType;
+  setRole: (arg0: RoleType) => void;
   submit: ()=>void;
 };
-const UserInfo = ({ roles, user, setUser, submit }: UserInfoType) => {
-  if (!user) return null;
+const RoleInfo = ({ menus, role, setRole, submit }: RoleInfoType) => {
+  if (!role) return null;
   return (
     <div className="shadow-lg bg-white rounded-2xl p-4 w-auto h-auto first:mt-4 last:mb-4">
       <Input
         className="my-4"
-        label="用户名"
+        label="名称"
         type="text"
         onChange={(e) => {
-          setUser({ ...user, username: e.currentTarget.value });
+          setRole({...role, raw: e.currentTarget.value});
         }}
-        value={user.username}
-        placeholder={user.username}
-      />
-      <Input
-        className="my-4"
-        label="密码"
-        type="text"
-        onChange={(e) => {
-          if(e.currentTarget.value.length > 0)
-            setUser({ ...user, password: e.currentTarget.value });
-        }}
-        placeholder="不修改就不写"
-      />
-      <Select
-        data={roles}
-        className="my-4 "
-        label="角色"
-        value={user.role!}
-        click={(role) => setUser({ ...user, role: role } as UserType)}
-      />
-      <CheckBox
-        enable={user.active}
-        label="激活"
-        click={(e) => setUser({ ...user, active: e })}
-      />
-
-      <Input
-        className="my-4"
-        label="email"
-        type="text"
-        onChange={(e) => {
-          setUser(user);
-        }}
-        value={user.email}
-        placeholder={user.email}
+        value={role.raw}
+        placeholder={role.raw}
       />
       <Input
         className="mt-4"
         label="带宽kb/s"
         type="text"
         onChange={(e) => {
-          setUser({ ...user, role: {...user.role, bandwidth: parseInt(e.currentTarget.value)} });
+          setRole({ ...role, bandwidth: parseInt(e.currentTarget.value)});
         }}
-        value={user.role.bandwidth}
+        value={role.bandwidth}
       />
       <div className="flex justify-between">
         <div
@@ -90,28 +58,27 @@ const UserInfo = ({ roles, user, setUser, submit }: UserInfoType) => {
   );
 };
 
-export default function MangerUser({
-  users,
-  roles,
+export default function MangerRole
+({
+  roles
 }: {
-  users: UserType[];
   roles: Role[];
 }) {
   const { show } = useModal();
-  const [currentUser, setUser] = useState<UserType>();
+  const [currentRole, setRole] = useState<RoleType>();
   const submit = async()=>{
     const res = await fetch(`${host.api}/user/update`, {
       method: 'POST',
-      body: JSON.stringify(currentUser)
+      body: JSON.stringify(currentRole)
     })
   }
   return (
     <div className="shadow-sm rounded-2xl w-min p-4 bg-white overflow-hidden my-8">
       <PortalModal>
-        <UserInfo 
-        roles={roles} 
-        user={currentUser!} 
-        setUser={setUser}
+        <RoleInfo 
+        menus={[]}
+        role={currentRole!} 
+        setRole={setRole}
         submit={submit}
          />
       </PortalModal>
@@ -122,13 +89,10 @@ export default function MangerUser({
               id
             </th>
             <th className="border-b dark:border-slate-600 font-medium p-4 pr-8 pt-0 text-slate-400 dark:text-slate-200 text-left whitespace-nowrap">
-              用户
-            </th>
-            <th className="border-b dark:border-slate-600 font-medium p-4 pr-8 pt-0 text-slate-400 dark:text-slate-200 text-left whitespace-nowrap">
               角色
             </th>
             <th className="border-b dark:border-slate-600 font-medium p-4 pr-8 pt-0 text-slate-400 dark:text-slate-200 text-left whitespace-nowrap">
-              激活
+              带宽
             </th>
             <th className="border-b dark:border-slate-600 font-medium p-4 pr-8 pt-0 text-slate-400 dark:text-slate-200 text-left whitespace-nowrap">
               操作
@@ -136,42 +100,23 @@ export default function MangerUser({
           </tr>
         </thead>
         <tbody className="bg-white dark:bg-slate-800">
-          {users.map((item, i) => (
+          {roles.map((item, i) => (
             <tr key={i}>
               <td className="border-b border-slate-100 dark:border-slate-700 p-4 pl-8 text-slate-500 dark:text-slate-400">
                 {item.id}
               </td>
-              <td className="border-b border-slate-100 dark:border-slate-700 p-4 text-slate-500 dark:text-slate-400">
-                <div className="flex items-center pr-8">
-                  <img
-                    alt={item.username}
-                    className="h-10 w-10 flex-none rounded-full"
-                  />
-                  <div className="ml-2 flex-auto">
-                    <div className="font-medium">{item.username}</div>
-                    <div className="text-slate-700">{item.email}</div>
-                  </div>
-                </div>
+
+              <td className="border-b border-slate-100 dark:border-slate-700 p-4 pr-8 text-slate-500 dark:text-slate-400">
+                {item.raw}
               </td>
               <td className="border-b border-slate-100 dark:border-slate-700 p-4 pr-8 text-slate-500 dark:text-slate-400">
-                {item.role.raw}
-              </td>
-              <td className="whitespace-nowrap border-b border-slate-100 dark:border-slate-700 p-4 pr-8 text-slate-500 dark:text-slate-400">
-                {item.active ? (
-                  <span className="px-2 py-1 flex items-center font-semibold text-xs rounded-md text-green-700 bg-green-50">
-                    激活
-                  </span>
-                ) : (
-                  <span className="px-2 py-1 flex items-center font-semibold text-xs rounded-md text-red-700 bg-red-50">
-                    失效
-                  </span>
-                )}
+                {item.bandwidth}
               </td>
               <td className="border-b border-slate-100 dark:border-slate-700 p-4 pr-8 text-slate-500 dark:text-slate-400">
                 <FontAwesomeIcon
                   onClick={() => {
                     show();
-                    setUser(item);
+                    setRole(item);
                   }}
                   className="text-blue-700 hover:text-blue-500 cursor-pointer ease-in duration-300"
                   icon={faPenToSquare}
@@ -186,11 +131,9 @@ export default function MangerUser({
 }
 
 export const getServerSideProps = async (ctx: NextPageContext) => {
-  const users: User[] = await (await fetch(`${host.api}/user/all`)).json(); //获取用户
   const roles: Role[] = await (await fetch(`${host.api}/auth/role/all`)).json(); //获取角色
   return {
     props: {
-      users: users,
       roles: roles,
     },
   };

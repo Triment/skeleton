@@ -7,13 +7,10 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   const loginPage = new Menu('登录', 'folder', '/auth/login');
   const homePage = new Menu('主页', 'home', '/');
   const fileDown = new Menu('文件下载', 'folder', '/admin/filemanger');
-  const adminMange = new Menu('管理用户', 'folder', '/admin/manger/user');
+  const adminUserMange = new Menu('管理用户', 'folder', '/admin/manger/user');
+  const adminRoleMange = new Menu('角色管理', 'folder', '/admin/manger/role')
   const role = new Role('管理员');
-  role.menus = [fileDown, adminMange];
-  await DataBase.manager.save(fileDown);
-  await DataBase.manager.save(loginPage);
-  await DataBase.manager.save(homePage);
-  await DataBase.manager.save(adminMange);
+  role.menus = [fileDown, adminUserMange, adminRoleMange];
   const user = new User(
     'admin',
     'admin@cd123',
@@ -21,8 +18,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     '13198898368@163.com',
     role,
   );
-  user.role = role;
-  await DataBase.manager.save(role);
+  await DataBase.manager.save([adminUserMange, adminRoleMange, fileDown, homePage, loginPage, role])
   res.status(200).json(await DataBase.manager.save(user));
 };
 export default withDB(handler);

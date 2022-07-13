@@ -28,7 +28,9 @@ class Menu {
   @Column('varchar')
   link: string;
 
-  @Column('simple-array')
+  @Column('simple-array', {
+    nullable: true
+  })
   @ManyToOne(() => Role, (role) => role.menus)
   roles!: Role[];
 }
@@ -49,13 +51,17 @@ class Role {
   })
   bandwidth!: number;
 
-  @Column('simple-array')
+  @Column('simple-array', {
+    nullable: true
+  })
   @OneToMany(() => User, (user) => user.role)
   users!: User[];
 
   @JoinTable()
   @Column('simple-array')
-  @OneToMany(() => Menu, (menu) => menu.roles)
+  @OneToMany(() => Menu, (menu) => menu.roles, {
+    cascade: true
+  })
   menus!: Menu[];
 }
 
