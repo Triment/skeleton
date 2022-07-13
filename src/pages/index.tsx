@@ -13,5 +13,7 @@ export const getServerSideProps = ({ req, res}: NextPageContext )=>{
     Location: `/admin/filemanger`
   })
   res?.end()
-  return
+  return {
+    props: {}
+  }
 }

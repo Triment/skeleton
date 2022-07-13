@@ -7,13 +7,13 @@ export const Input: React.FC<
 > = (props) => {
   const { label, ...inputProps } = props;
   return (
-    <>
+    <div className='my-2'>
       <label className="block text-sm font-medium text-gray-700">{label}</label>
       <input
         {...inputProps}
         className="w-full mt-2 flex items-center justify-between rounded-md bg-white py-2 px-3 shadow-sm ring-1 ring-slate-700/10"
       />
-    </>
+    </div>
   );
 };
 
@@ -47,7 +47,7 @@ export function Select<T extends SelectDataType>(
   return (
     <div
       {...other}
-      className="pointer-events-auto my-4 w-auto text-[0.8125rem] leading-5 text-slate-700"
+      className="pointer-events-auto my-2 w-auto text-[0.8125rem] leading-5 text-slate-700"
     >
       <div className="font-semibold text-slate-900">{label}</div>
       <div

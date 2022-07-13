@@ -9,13 +9,13 @@ import { PortalModal } from '../../util/Portal';
 import { NextPageContext } from 'next';
 import { FileItemType } from '../api/file/getfiles';
 import useUser from '../../lib/useUser';
+import Link from 'next/link';
 
 export default function fileManger({ data }: { data: FileItemType[] }) {
   //console.log(data)
   const { show, refOfModal } = useModal();
   const [currentFileName, setDownloadName] = useState<string>(); //modal显示文件名
   const [downloadProgress, setProgress] = useState(0); //下载进度
-  const [rate, setRate] = useState(0);
   const controller = new AbortController();
   const { signal } = controller;
   const { user } = useUser()
@@ -41,8 +41,16 @@ export default function fileManger({ data }: { data: FileItemType[] }) {
     var startLength = 0;
     const rateInterval = setInterval(() => {
       //速度和定时器的时间有关系这里是0.5s 所以应当乘以二得到秒速
-      setRate(((receivedLength - startLength)*4) / 1024);
-      console.log()
+      const rateView = document.getElementById('download-rate')
+      let rate: number = ((receivedLength - startLength)*4) / 1024
+      const value = `${rate > 1024
+        ? rate > 1024 * 1024
+          ? `${rate / (1024 * 1024)}Gb`
+          : `${rate / 1024}Mb`
+        : `${rate}Kb`}
+      /s`
+      rateView!.innerText = value
+      console.log(value, rateView)
       startLength = receivedLength;
     }, 250);
     while (true) {
@@ -78,13 +86,8 @@ export default function fileManger({ data }: { data: FileItemType[] }) {
       {/* 下载进度条 */}
       <PortalModal>
             <p>{currentFileName}</p>
-            <span>
-              {rate > 1024
-                ? rate > 1024 * 1024
-                  ? `${rate / (1024 * 1024)}Gb`
-                  : `${rate / 1024}Mb`
-                : `${rate}Kb`}
-              /s
+            <span id="download-rate">
+              
             </span>
             <Progress state={downloadProgress} />
 
@@ -113,6 +116,10 @@ export default function fileManger({ data }: { data: FileItemType[] }) {
               )}
             </div>
       </PortalModal>
+      <Link href={'/auth/login'}><span className="cursor-pointer pointer-events-auto my-8 rounded-md bg-green-600 py-2 px-3 text-[0.8125rem] font-semibold leading-5 text-center text-white hover:bg-green-500">
+          登录
+        </span></Link>
+      
       {data.map((item, index) => (
         <div
           key={index}

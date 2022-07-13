@@ -5,7 +5,6 @@ import { withDB } from '../../../util/ApiWrapper';
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   const { id, ...other } = JSON.parse(req.body);
-  console.log(other)
   if (!!id) {
     const queryUser = await DataBase.getRepository(User)
       .createQueryBuilder('user')
@@ -14,9 +13,11 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       .where('user.id = :id', { id: id })
       .getOne();
     queryUser!.username = other.username
-    if (!!other.password && other.password.length > 0)
-        queryUser!.password = other.password
-    queryUser!.role.bandwidth = other.role.bandwidth
+    if (!!other.password && other.password.length > 0){
+      queryUser!.password = other.password
+      console.log(other)
+    }
+        
     try{
       await DataBase.manager.save(queryUser)
     }catch(error){

@@ -6,6 +6,7 @@ import {
   OneToMany,
   JoinTable,
   Relation,
+  ManyToMany,
 } from 'typeorm';
 import { User } from './user';
 
@@ -31,7 +32,7 @@ class Menu {
   @Column('simple-array', {
     nullable: true
   })
-  @ManyToOne(() => Role, (role) => role.menus)
+  @ManyToMany(() => Role, (role) => role.menus)
   roles!: Role[];
 }
 
@@ -59,7 +60,7 @@ class Role {
 
   @JoinTable()
   @Column('simple-array')
-  @OneToMany(() => Menu, (menu) => menu.roles, {
+  @ManyToMany(() => Menu, (menu) => menu.roles, {
     cascade: true
   })
   menus!: Menu[];

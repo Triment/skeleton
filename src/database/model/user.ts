@@ -70,7 +70,9 @@ class User {
   }
   @BeforeUpdate()
   async hashPwd() {
-    this.password = aesEncrypt(this.password);
+    if (!!this.password) {
+      this.password = aesEncrypt(this.password);
+    }
   }
 }
 

@@ -65,15 +65,6 @@ const UserInfo = ({ roles, user, setUser, submit }: UserInfoType) => {
         value={user.email}
         placeholder={user.email}
       />
-      <Input
-        className="mt-4"
-        label="带宽kb/s"
-        type="text"
-        onChange={(e) => {
-          setUser({ ...user, role: {...user.role, bandwidth: parseInt(e.currentTarget.value)} });
-        }}
-        value={user.role.bandwidth}
-      />
       <div className="flex justify-between">
         <div
         onClick={submit}
@@ -100,6 +91,7 @@ export default function MangerUser({
   const { show } = useModal();
   const [currentUser, setUser] = useState<UserType>();
   const submit = async()=>{
+    console.log(currentUser)
     const res = await fetch(`${host.api}/user/update`, {
       method: 'POST',
       body: JSON.stringify(currentUser)
