@@ -5,9 +5,9 @@ import { withDB } from '../../../../util/ApiWrapper';
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   const allRole = await DataBase.getRepository(Role)
-      .createQueryBuilder('role')
-      .leftJoinAndSelect('role.menus', 'menus')
-      .getMany();
+    .createQueryBuilder('role')
+    .leftJoinAndSelect('role.menus', 'menus')
+    .getMany();
   res.status(200).json(allRole);
 };
 export default withDB(handler);

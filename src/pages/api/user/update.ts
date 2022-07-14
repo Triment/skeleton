@@ -12,18 +12,18 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       .leftJoinAndSelect('role.menus', 'menus')
       .where('user.id = :id', { id: id })
       .getOne();
-    queryUser!.username = other.username
-    if (!!other.password && other.password.length > 0){
-      queryUser!.password = other.password
-      console.log(other)
+    queryUser!.username = other.username;
+    queryUser!.avatar = other.avatar;
+    if (!!other.password && other.password.length > 0) {
+      queryUser!.password = other.password;
     }
-        
-    try{
-      await DataBase.manager.save(queryUser)
-    }catch(error){
-      console.log(`error:`, error)
+
+    try {
+      await DataBase.manager.save(queryUser);
+    } catch (error) {
+      console.log(`error:`, error);
     }
-    
+
     res.status(200).json(queryUser);
   }
 };

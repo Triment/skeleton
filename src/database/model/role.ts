@@ -30,7 +30,7 @@ class Menu {
   link: string;
 
   @Column('simple-array', {
-    nullable: true
+    nullable: true,
   })
   @ManyToMany(() => Role, (role) => role.menus)
   roles!: Role[];
@@ -48,12 +48,12 @@ class Role {
   raw: string;
 
   @Column('int', {
-    default: 512
+    default: 512,
   })
   bandwidth!: number;
 
   @Column('simple-array', {
-    nullable: true
+    nullable: true,
   })
   @OneToMany(() => User, (user) => user.role)
   users!: User[];
@@ -61,7 +61,7 @@ class Role {
   @JoinTable()
   @Column('simple-array')
   @ManyToMany(() => Menu, (menu) => menu.roles, {
-    cascade: true
+    cascade: true,
   })
   menus!: Menu[];
 }

@@ -9,7 +9,7 @@ export default function TopNavigation() {
     redirectTo: '/',
     redirectIfFound: true,
   });
-  const router = useRouter()
+  const router = useRouter();
   return (
     <header className="bg-white h-16 items-center relative shadow w-full z-10 md:h-20 lg:rounded-2xl">
       <div className="flex flex-center flex-col h-full justify-center mx-auto px-3 relative">
@@ -66,11 +66,17 @@ export default function TopNavigation() {
                 }),
                 false,
               );
-              router.push('/admin/filemanger')
+              router.push('/admin/filemanger');
             }}
-            className="flex cursor-pointer items-center justify-end ml-5 p-1 relative w-1/4 sm:mr-0 sm:right-auto"
+            className="flex cursor-pointer items-center justify-end ml-5 p-1 relative w-1/4 sm:mr-0 sm:right-auto hover:text-blue-500"
           >
-            {user?.username+ ' '}登出          </div>
+            <img
+              alt={user?.username}
+              src={user?.avatar}
+              className="h-10 w-10 flex-none rounded-full"
+            />
+            <p>登出 </p>
+          </div>
         </div>
       </div>
     </header>

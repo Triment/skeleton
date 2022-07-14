@@ -1,7 +1,9 @@
 import { DetailedHTMLProps, HTMLAttributes, useState } from 'react';
 import { host } from '../../config';
 
-export const Login: React.FC<DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement>> = (props) => {
+export const Login: React.FC<
+  DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement>
+> = (props) => {
   const [loginForm, setForm] = useState<{ username: string; password: string }>(
     { username: '', password: '' },
   );

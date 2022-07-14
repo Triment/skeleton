@@ -13,84 +13,44 @@ import { InsertValuesMissingError } from 'typeorm';
 
 //用户信息修改卡片
 
-type RoleInfoType = {
+type MenuInfoType = {
   menus: Menu[];
-  role: RoleType;
-  setRole: (arg0: RoleType) => void;
+  menu: Menu;
+  setMenu: (arg0: Menu) => void;
   submit: () => void;
 };
-const RoleInfo = ({ menus, role, setRole, submit }: RoleInfoType) => {
-  if (!role) return null;
+const MenuInfo = ({ menus, menu, setMenu, submit }: MenuInfoType) => {
+  if (!menu) return null;
   return (
     <div className="shadow-lg bg-white rounded-2xl p-4 w-auto h-auto first:mt-4 last:mb-4">
       <Input
         className="my-4"
-        label="名称"
+        label="链接"
         type="text"
         onChange={(e) => {
-          setRole({ ...role, raw: e.currentTarget.value });
+          setMenu({ ...menu, link: e.currentTarget.value });
         }}
-        value={role.raw}
-        placeholder={role.raw}
+        value={menu.link}
+        placeholder={menu.link}
       />
       <Input
         className="my-4 py-2"
-        label="带宽kb/s"
+        label="菜单名称"
         type="text"
         onChange={(e) => {
-          setRole({ ...role, bandwidth: parseInt(e.currentTarget.value) });
+          setMenu({ ...menu, title: e.currentTarget.value });
         }}
-        value={role.bandwidth}
+        value={menu.title}
       />
-      <ul>
-        {menus.map((item) => {
-          const includeItem = role.menus.some((v) => v.link === item.link);
-          return (
-            <li className="flex items-center text-gray-600 dark:text-gray-200 justify-between py-3 border-b-2 border-gray-100 dark:border-gray-800">
-              <div className="flex items-center justify-start text-sm">
-                <span className={`${includeItem ? '' : 'line-through'} mx-4`}>
-                  {item.title}
-                </span>
-                <span className={includeItem ? '' : 'line-through'}>
-                  {item.link}
-                </span>
-              </div>
-              <svg
-                width="20"
-                height="20"
-                fill="currentColor"
-                onClick={() => {
-                  //delete
-                  console.log(role);
-                  if (includeItem) {
-                    //删除菜单
-                    const menustmp = role.menus.filter(
-                      (i) => i.link != item.link,
-                    );
-                    setRole({ ...role, menus: menustmp });
-                  } else {
-                    setRole({ ...role, menus: [...role.menus, item] });
-                  }
-                  //push
-                }}
-                className={`mx-4 ${
-                  includeItem ? 'text-green-500' : 'text-gray-500'
-                } cursor-pointer hover:text-green-300 dark:text-gray-300`}
-                viewBox="0 0 1024 1024"
-              >
-                <path
-                  d="M699 353h-46.9c-10.2 0-19.9 4.9-25.9 13.3L469 584.3l-71.2-98.8c-6-8.3-15.6-13.3-25.9-13.3H325c-6.5 0-10.3 7.4-6.5 12.7l124.6 172.8a31.8 31.8 0 0 0 51.7 0l210.6-292c3.9-5.3.1-12.7-6.4-12.7z"
-                  fill="currentColor"
-                />
-                <path
-                  d="M512 64C264.6 64 64 264.6 64 512s200.6 448 448 448s448-200.6 448-448S759.4 64 512 64zm0 820c-205.4 0-372-166.6-372-372s166.6-372 372-372s372 166.6 372 372s-166.6 372-372 372z"
-                  fill="currentColor"
-                />
-              </svg>
-            </li>
-          );
-        })}
-      </ul>
+      <Input
+        className="my-4 py-2"
+        label="图标"
+        type="text"
+        onChange={(e) => {
+          setMenu({ ...menu, icon: e.currentTarget.value });
+        }}
+        value={menu.icon}
+      />
       <div className="flex justify-between">
         <div
           onClick={submit}
@@ -108,28 +68,23 @@ const RoleInfo = ({ menus, role, setRole, submit }: RoleInfoType) => {
   );
 };
 
-export default function MangerRole({
-  menus,
-  roles,
-}: {
-  roles: Role[];
-  menus: Menu[];
-}) {
+export default function MangerRole({ menus }: { menus: Menu[] }) {
   const { show } = useModal();
-  const [currentRole, setRole] = useState<RoleType>();
+  const [currentMenu, setMenu] = useState<Menu>();
   const submit = async () => {
-    const res = await fetch(`${host.api}/permission/role/update`, {
+    const res = await fetch(`${host.api}/permission/menu/update`, {
       method: 'POST',
-      body: JSON.stringify(currentRole),
+      body: JSON.stringify(currentMenu),
     });
+    console.log(res);
   };
   return (
     <div className="shadow-sm rounded-2xl w-min p-4 bg-white overflow-hidden my-8">
       <PortalModal>
-        <RoleInfo
+        <MenuInfo
           menus={menus}
-          role={currentRole!}
-          setRole={setRole}
+          menu={currentMenu!}
+          setMenu={setMenu}
           submit={submit}
         />
       </PortalModal>
@@ -140,10 +95,10 @@ export default function MangerRole({
               id
             </th>
             <th className="border-b dark:border-slate-600 font-medium p-4 pr-8 pt-0 text-slate-400 dark:text-slate-200 text-left whitespace-nowrap">
-              角色
+              菜单名
             </th>
             <th className="border-b dark:border-slate-600 font-medium p-4 pr-8 pt-0 text-slate-400 dark:text-slate-200 text-left whitespace-nowrap">
-              带宽
+              菜单链接
             </th>
             <th className="border-b dark:border-slate-600 font-medium p-4 pr-8 pt-0 text-slate-400 dark:text-slate-200 text-left whitespace-nowrap">
               操作
@@ -151,23 +106,23 @@ export default function MangerRole({
           </tr>
         </thead>
         <tbody className="bg-white dark:bg-slate-800">
-          {roles.map((item, i) => (
+          {menus.map((item, i) => (
             <tr key={i}>
               <td className="border-b border-slate-100 dark:border-slate-700 p-4 pl-8 text-slate-500 dark:text-slate-400">
                 {item.id}
               </td>
 
               <td className="border-b border-slate-100 dark:border-slate-700 p-4 pr-8 text-slate-500 dark:text-slate-400">
-                {item.raw}
+                {item.title}
               </td>
               <td className="border-b border-slate-100 dark:border-slate-700 p-4 pr-8 text-slate-500 dark:text-slate-400">
-                {item.bandwidth}
+                {item.link}
               </td>
               <td className="border-b border-slate-100 dark:border-slate-700 p-4 pr-8 text-slate-500 dark:text-slate-400">
                 <FontAwesomeIcon
                   onClick={() => {
                     show();
-                    setRole(item);
+                    setMenu(item);
                   }}
                   className="text-blue-700 hover:text-blue-500 cursor-pointer ease-in duration-300"
                   icon={faPenToSquare}
@@ -182,11 +137,11 @@ export default function MangerRole({
 }
 
 export const getServerSideProps = async (ctx: NextPageContext) => {
-  const roles: Role[] = await (await fetch(`${host.api}/auth/role/all`)).json(); //获取角色
-  const menus: Menu[] = await (await fetch(`${host.api}/auth/getmenu`)).json();
+  const menus: Menu[] = await (
+    await fetch(`${host.api}/permission/menu/all`)
+  ).json();
   return {
     props: {
-      roles: roles,
       menus: menus,
     },
   };

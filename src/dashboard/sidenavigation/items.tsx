@@ -1,12 +1,10 @@
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { useEffect, useState } from 'react';
-import { host } from '../../config';
+import React, { useEffect, useState } from 'react';
 import { Menu } from '../../database/model';
 import useUser from '../../lib/useUser';
 
-import data from './data';
-import FolderIcon from './icons/folder';
+import { Icons } from './icons';
 
 const style = {
   title: `font-normal mx-4 text-sm`,
@@ -17,25 +15,28 @@ const style = {
 export default function SidenavItems() {
   const { asPath } = useRouter();
   const { user, mutateUser } = useUser();
-  useEffect(()=>{
-    console.log(user)
-  })
+  useEffect(() => {
+    console.log(user);
+  });
   return (
     <ul>
       <li>
-        {user&&user.role&&user?.role.menus.map((item: Menu) => (
-          <Link href={item.link} key={item.title}>
-            <a
-              className={`${style.link} 
+        {user &&
+          user.role &&
+          user?.role.menus.map((item: Menu) => {
+            const Icon = Icons.get(item.icon)!;
+            return (
+              <Link href={item.link} key={item.title}>
+                <a
+                  className={`${style.link} 
               ${item.link === asPath && style.active}`}
-            >
-              <span>
-                <FolderIcon />
-              </span>
-              <span className={style.title}>{item.title}</span>
-            </a>
-          </Link>
-        ))}
+                >
+                  <span children={<Icon />} />
+                  <span className={style.title}>{item.title}</span>
+                </a>
+              </Link>
+            );
+          })}
       </li>
     </ul>
   );

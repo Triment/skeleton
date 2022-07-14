@@ -7,10 +7,10 @@ export interface UserStore {
 
 export type RoleType = Omit<Role, 'menus'> & {
   menus: Menu[];
-  bandwidth: number
+  bandwidth: number;
 };
 export type UserType = Omit<User, 'role'> & {
-  role: RoleType
+  role: RoleType;
 };
 
 export const userSlice = createSlice({

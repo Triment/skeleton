@@ -16,7 +16,7 @@ type UserInfoType = {
   roles: SelectDataType[];
   user: UserType;
   setUser: (arg0: UserType) => void;
-  submit: ()=>void;
+  submit: () => void;
 };
 const UserInfo = ({ roles, user, setUser, submit }: UserInfoType) => {
   if (!user) return null;
@@ -34,10 +34,20 @@ const UserInfo = ({ roles, user, setUser, submit }: UserInfoType) => {
       />
       <Input
         className="my-4"
+        label="头像"
+        type="text"
+        onChange={(e) => {
+          setUser({ ...user, avatar: e.currentTarget.value });
+        }}
+        value={user.avatar}
+        placeholder={user.avatar}
+      />
+      <Input
+        className="my-4"
         label="密码"
         type="text"
         onChange={(e) => {
-          if(e.currentTarget.value.length > 0)
+          if (e.currentTarget.value.length > 0)
             setUser({ ...user, password: e.currentTarget.value });
         }}
         placeholder="不修改就不写"
@@ -67,8 +77,9 @@ const UserInfo = ({ roles, user, setUser, submit }: UserInfoType) => {
       />
       <div className="flex justify-between">
         <div
-        onClick={submit}
-        className="cursor-pointer pointer-events-auto m-8 rounded-md bg-indigo-600 py-2 px-3 text-[0.8125rem] font-semibold leading-5 text-center text-white hover:bg-indigo-500">
+          onClick={submit}
+          className="cursor-pointer pointer-events-auto m-8 rounded-md bg-indigo-600 py-2 px-3 text-[0.8125rem] font-semibold leading-5 text-center text-white hover:bg-indigo-500"
+        >
           修改
         </div>
         <div className="cursor-pointer pointer-events-auto m-8 rounded-md bg-red-600 py-2 px-3 text-[0.8125rem] font-semibold leading-5 text-center text-white hover:bg-red-500">
@@ -90,22 +101,22 @@ export default function MangerUser({
 }) {
   const { show } = useModal();
   const [currentUser, setUser] = useState<UserType>();
-  const submit = async()=>{
-    console.log(currentUser)
+  const submit = async () => {
+    console.log(currentUser);
     const res = await fetch(`${host.api}/user/update`, {
       method: 'POST',
-      body: JSON.stringify(currentUser)
-    })
-  }
+      body: JSON.stringify(currentUser),
+    });
+  };
   return (
     <div className="shadow-sm rounded-2xl w-min p-4 bg-white overflow-hidden my-8">
       <PortalModal>
-        <UserInfo 
-        roles={roles} 
-        user={currentUser!} 
-        setUser={setUser}
-        submit={submit}
-         />
+        <UserInfo
+          roles={roles}
+          user={currentUser!}
+          setUser={setUser}
+          submit={submit}
+        />
       </PortalModal>
       <table className="border-collapse table-auto text-sm">
         <thead>
@@ -137,6 +148,7 @@ export default function MangerUser({
                 <div className="flex items-center pr-8">
                   <img
                     alt={item.username}
+                    src={item.avatar}
                     className="h-10 w-10 flex-none rounded-full"
                   />
                   <div className="ml-2 flex-auto">

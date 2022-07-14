@@ -10,6 +10,7 @@ import { Login } from '../components/auth/Login';
 import { withSessionSsr } from '../lib/withSession';
 import { host } from '../config';
 import useUser from '../lib/useUser';
+import FrontTopNavigation from './topnavigation/Front';
 /*	w-[calc(100%-16rem)] class get the remain width of the main component from lg:viewport by subtracting
 (the total width by the width of the side navigation component which is w-64 = 16rem)*/
 
@@ -26,7 +27,7 @@ const publicMenus = ['/', '/auth/login', '/admin/manger/'];
 function DashboardLayout({ children }: ComponentProps<'div'>) {
   const { user, mutateUser } = useUser({
     redirectTo: '/',
-    redirectIfFound: true
+    redirectIfFound: true,
   });
   const { open } = useToggle();
   const { modalOpen, refOfModal, show } = useModal();
@@ -41,7 +42,6 @@ function DashboardLayout({ children }: ComponentProps<'div'>) {
       return;
     }
   });
-  console.log(ok, user);
   if (!!user?.role) {
     console.log(`进入遍历用户菜单`, user);
     user.role!.menus.map((item) => {
@@ -51,18 +51,15 @@ function DashboardLayout({ children }: ComponentProps<'div'>) {
       }
     });
   }
-  // 获取
-  console.log(`${pathname} 是否通过${ok}`);
   if (ok) {
-    //管理界面
-    console.log(user)
     if (user?.role && user?.role.raw !== 'guest') {
       return (
         <div className={style.container}>
           <div
             onClick={() => show()}
-            className={`absolute justify-center w-full h-full ease-in duration-300 ${modalOpen ? 'flex z-50' : 'hidden'
-              }`}
+            className={`absolute justify-center w-full h-full ease-in duration-300 ${
+              modalOpen ? 'flex z-50' : 'hidden'
+            }`}
           >
             <div className={`flex-col flex justify-center`}>
               <div
@@ -87,16 +84,25 @@ function DashboardLayout({ children }: ComponentProps<'div'>) {
       );
     }
     //对于匿名者显示界面
-    return <div className={style.container}>
-      <div className={`absolute inset-0 w-full justify-center flex-col ${modalOpen ? 'flex z-50' : 'hidden'}`} >
+    return (
+      <div className={style.container}>
+        {pathname !== '/auth/login' ? <FrontTopNavigation /> : null}
         <div
-          onClick={() => console.log('model')}
-          className={`mx-auto flex flex-col shadow-lg bg-white rounded-2xl p-4 dark:bg-gray-700 w-96 h-36 ease-in duration-300 `}
-          ref={refOfModal}
-        ></div>
+          className={`absolute inset-0 w-full justify-center flex-col ${
+            modalOpen ? 'flex z-50' : 'hidden'
+          }`}
+        >
+          <div
+            onClick={() => console.log('model')}
+            className={`mx-auto flex flex-col shadow-lg bg-white rounded-2xl p-4 dark:bg-gray-700 w-96 h-36 ease-in duration-300 `}
+            ref={refOfModal}
+          ></div>
+        </div>
+        <div className={style.container + `${modalOpen ? ' blur-sm' : ''}`}>
+          {children}
+        </div>
       </div>
-      <div className={style.container + `${modalOpen ? ' blur-sm' : ''}`}>{children}</div>
-    </div>;
+    );
   } else {
     //不在公共api中的就返回登录
     // return <></>

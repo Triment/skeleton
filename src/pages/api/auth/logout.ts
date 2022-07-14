@@ -3,17 +3,17 @@ import { withSessionRoute } from '../../../lib/withSession';
 
 const handler = (req: NextApiRequest, res: NextApiResponse) => {
   req.session.destroy();
-  res.json({ 
+  res.json({
     username: 'guest',
     role: {
       raw: 'guest',
       menus: [
         {
           title: '文件下载',
-          link: '/admin/filemanger'
-        }
-      ]
-    }
+          link: '/admin/filemanger',
+        },
+      ],
+    },
   });
 };
 

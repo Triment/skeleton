@@ -7,7 +7,7 @@ export const Input: React.FC<
 > = (props) => {
   const { label, ...inputProps } = props;
   return (
-    <div className='my-2'>
+    <div className="my-2">
       <label className="block text-sm font-medium text-gray-700">{label}</label>
       <input
         {...inputProps}

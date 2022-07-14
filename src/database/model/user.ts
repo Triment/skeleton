@@ -39,6 +39,9 @@ class User {
   @Column('varchar')
   username: string;
 
+  @Column('varchar')
+  avatar: string | undefined;
+
   @Column('varchar', {
     select: false,
   })

@@ -5,7 +5,11 @@ import { withDB } from '../../../util/ApiWrapper';
 import { withAuth } from '../../../util/withAuth';
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
-  const data = await DataBase.manager.find(Menu);
+  const data = await DataBase.manager.find(Menu, {
+    order: {
+      id: 'DESC',
+    },
+  });
   res.status(200).json(data);
 };
 export default withAuth(withDB(handler));
