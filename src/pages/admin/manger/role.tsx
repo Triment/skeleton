@@ -10,6 +10,7 @@ import { Menu, Role, User } from '../../../database/model';
 import { NextPageContext } from 'next';
 import { RoleType } from '../../../redux/userSlice';
 import { InsertValuesMissingError } from 'typeorm';
+import { AddIcon } from '../../../dashboard/sidenavigation/icons/add';
 
 //用户信息修改卡片
 
@@ -18,11 +19,15 @@ type RoleInfoType = {
   role: RoleType;
   setRole: (arg0: RoleType) => void;
   submit: () => void;
+  isCreate: boolean;
 };
-const RoleInfo = ({ menus, role, setRole, submit }: RoleInfoType) => {
-  if (!role) return null;
+const RoleInfo = ({ isCreate, menus, role, setRole, submit }: RoleInfoType) => {
+  //if (!role) return null;
   return (
-    <div className="shadow-lg bg-white rounded-2xl p-4 w-auto h-auto first:mt-4 last:mb-4">
+    <div
+      onClick={(e) => e.preventDefault()}
+      className="shadow-lg bg-white rounded-2xl p-4 w-auto h-auto first:mt-4 last:mb-4"
+    >
       <Input
         className="my-4"
         label="名称"
@@ -30,8 +35,8 @@ const RoleInfo = ({ menus, role, setRole, submit }: RoleInfoType) => {
         onChange={(e) => {
           setRole({ ...role, raw: e.currentTarget.value });
         }}
-        value={role.raw}
-        placeholder={role.raw}
+        value={role && role.raw}
+        placeholder={role && role.raw}
       />
       <Input
         className="my-4 py-2"
@@ -40,13 +45,17 @@ const RoleInfo = ({ menus, role, setRole, submit }: RoleInfoType) => {
         onChange={(e) => {
           setRole({ ...role, bandwidth: parseInt(e.currentTarget.value) });
         }}
-        value={role.bandwidth}
+        value={role && role.bandwidth}
       />
       <ul>
         {menus.map((item) => {
-          const includeItem = role.menus.some((v) => v.link === item.link);
+          const includeItem =
+            role && role.menus && role.menus.some((v) => v.link === item.link);
           return (
-            <li className="flex items-center text-gray-600 dark:text-gray-200 justify-between py-3 border-b-2 border-gray-100 dark:border-gray-800">
+            <li
+              key={item.id}
+              className="flex items-center text-gray-600 dark:text-gray-200 justify-between py-3 border-b-2 border-gray-100 dark:border-gray-800"
+            >
               <div className="flex items-center justify-start text-sm">
                 <span className={`${includeItem ? '' : 'line-through'} mx-4`}>
                   {item.title}
@@ -69,7 +78,11 @@ const RoleInfo = ({ menus, role, setRole, submit }: RoleInfoType) => {
                     );
                     setRole({ ...role, menus: menustmp });
                   } else {
-                    setRole({ ...role, menus: [...role.menus, item] });
+                    setRole({
+                      ...role,
+                      menus:
+                        role && role.menus ? [...role.menus, item] : [item],
+                    });
                   }
                   //push
                 }}
@@ -96,9 +109,17 @@ const RoleInfo = ({ menus, role, setRole, submit }: RoleInfoType) => {
           onClick={submit}
           className="cursor-pointer pointer-events-auto m-8 rounded-md bg-indigo-600 py-2 px-3 text-[0.8125rem] font-semibold leading-5 text-center text-white hover:bg-indigo-500"
         >
-          修改
+          {isCreate ? '创建' : '修改'}
         </div>
-        <div className="cursor-pointer pointer-events-auto m-8 rounded-md bg-red-600 py-2 px-3 text-[0.8125rem] font-semibold leading-5 text-center text-white hover:bg-red-500">
+        <div
+          onClick={(e) => {
+            fetch(`${host.api}/permission/role/delete`, {
+              method: 'POST',
+              body: JSON.stringify({ id: role.id }),
+            });
+          }}
+          className="cursor-pointer pointer-events-auto m-8 rounded-md bg-red-600 py-2 px-3 text-[0.8125rem] font-semibold leading-5 text-center text-white hover:bg-red-500"
+        >
           删除
         </div>
       </div>
@@ -117,66 +138,87 @@ export default function MangerRole({
 }) {
   const { show } = useModal();
   const [currentRole, setRole] = useState<RoleType>();
-  const submit = async () => {
+  const [isCreate, setCreate] = useState(false);
+  const modify = async () => {
     const res = await fetch(`${host.api}/permission/role/update`, {
       method: 'POST',
       body: JSON.stringify(currentRole),
     });
   };
+  const create = async () => {
+    const res = await fetch(`${host.api}/permission/role/create`, {
+      method: 'POST',
+      body: JSON.stringify(currentRole),
+    });
+  };
   return (
-    <div className="shadow-sm rounded-2xl w-min p-4 bg-white overflow-hidden my-8">
+    <div className=" p-4 overflow-hidden ">
+      <div className="flex justify-between my-4 ">
+        <AddIcon
+          onClick={(e) => {
+            e.preventDefault();
+            setCreate(true);
+            show();
+          }}
+          className="text-green-500 bg-white shadow-sm rounded-2xl p-1 hover:text-green-400 cursor-pointer"
+        />
+      </div>
       <PortalModal>
         <RoleInfo
+          isCreate={isCreate}
           menus={menus}
           role={currentRole!}
           setRole={setRole}
-          submit={submit}
+          submit={isCreate ? create : modify}
         />
       </PortalModal>
-      <table className="border-collapse table-auto text-sm">
-        <thead>
-          <tr>
-            <th className="border-b dark:border-slate-600 font-medium p-4 pl-8 pt-0 text-slate-400 dark:text-slate-200 text-left whitespace-nowrap">
-              id
-            </th>
-            <th className="border-b dark:border-slate-600 font-medium p-4 pr-8 pt-0 text-slate-400 dark:text-slate-200 text-left whitespace-nowrap">
-              角色
-            </th>
-            <th className="border-b dark:border-slate-600 font-medium p-4 pr-8 pt-0 text-slate-400 dark:text-slate-200 text-left whitespace-nowrap">
-              带宽
-            </th>
-            <th className="border-b dark:border-slate-600 font-medium p-4 pr-8 pt-0 text-slate-400 dark:text-slate-200 text-left whitespace-nowrap">
-              操作
-            </th>
-          </tr>
-        </thead>
-        <tbody className="bg-white dark:bg-slate-800">
-          {roles.map((item, i) => (
-            <tr key={i}>
-              <td className="border-b border-slate-100 dark:border-slate-700 p-4 pl-8 text-slate-500 dark:text-slate-400">
-                {item.id}
-              </td>
-
-              <td className="border-b border-slate-100 dark:border-slate-700 p-4 pr-8 text-slate-500 dark:text-slate-400">
-                {item.raw}
-              </td>
-              <td className="border-b border-slate-100 dark:border-slate-700 p-4 pr-8 text-slate-500 dark:text-slate-400">
-                {item.bandwidth}
-              </td>
-              <td className="border-b border-slate-100 dark:border-slate-700 p-4 pr-8 text-slate-500 dark:text-slate-400">
-                <FontAwesomeIcon
-                  onClick={() => {
-                    show();
-                    setRole(item);
-                  }}
-                  className="text-blue-700 hover:text-blue-500 cursor-pointer ease-in duration-300"
-                  icon={faPenToSquare}
-                />
-              </td>
+      <div className="shadow-sm rounded-2xl bg-white py-4 w-fit">
+        <table className="border-collapse table-auto text-sm">
+          <thead>
+            <tr>
+              <th className="border-b dark:border-slate-600 font-medium p-4 pl-8 pt-0 text-slate-400 dark:text-slate-200 text-left whitespace-nowrap">
+                id
+              </th>
+              <th className="border-b dark:border-slate-600 font-medium p-4 pr-8 pt-0 text-slate-400 dark:text-slate-200 text-left whitespace-nowrap">
+                角色
+              </th>
+              <th className="border-b dark:border-slate-600 font-medium p-4 pr-8 pt-0 text-slate-400 dark:text-slate-200 text-left whitespace-nowrap">
+                带宽
+              </th>
+              <th className="border-b dark:border-slate-600 font-medium p-4 pr-8 pt-0 text-slate-400 dark:text-slate-200 text-left whitespace-nowrap">
+                操作
+              </th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody className="rounded-2xl bg-white dark:bg-slate-800">
+            {roles.map((item, i) => (
+              <tr key={i}>
+                <td className="border-b border-slate-100 dark:border-slate-700 p-4 pl-8 text-slate-500 dark:text-slate-400">
+                  {item.id}
+                </td>
+
+                <td className="border-b border-slate-100 dark:border-slate-700 p-4 pr-8 text-slate-500 dark:text-slate-400">
+                  {item.raw}
+                </td>
+                <td className="border-b border-slate-100 dark:border-slate-700 p-4 pr-8 text-slate-500 dark:text-slate-400">
+                  {item.bandwidth}
+                </td>
+                <td className="border-b border-slate-100 dark:border-slate-700 p-4 pr-8 text-slate-500 dark:text-slate-400">
+                  <FontAwesomeIcon
+                    onClick={() => {
+                      setCreate(false); //从创建设置回编辑状态
+                      show();
+                      setRole(item);
+                    }}
+                    className="text-blue-700 hover:text-blue-500 cursor-pointer ease-in duration-300"
+                    icon={faPenToSquare}
+                  />
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 }

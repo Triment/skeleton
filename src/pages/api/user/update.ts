@@ -14,6 +14,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       .getOne();
     queryUser!.username = other.username;
     queryUser!.avatar = other.avatar;
+    queryUser!.active = other.active;
     if (!!other.password && other.password.length > 0) {
       queryUser!.password = other.password;
     }

@@ -28,4 +28,10 @@ const handler = (req: NextApiRequest, res: NextApiResponse) => {
   }
 };
 
+export const config = {
+  api: {
+    responseLimit: false,
+  },
+};
+
 export default withSessionRoute(handler);

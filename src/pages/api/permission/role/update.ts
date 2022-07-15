@@ -32,6 +32,14 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       .relation(Role, 'menus')
       .of(role)
       .addAndRemove(Menus, menus);
+    await DataBase.createQueryBuilder()
+      .update(Role)
+      .set({
+        bandwidth: parseInt(body.bandwidth),
+        raw: body.raw,
+      })
+      .where({ id: body.id })
+      .execute();
     res.status(200).json({ Menus });
   } catch (err) {
     console.log('错误', err);

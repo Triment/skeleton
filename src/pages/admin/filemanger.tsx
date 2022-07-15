@@ -46,8 +46,7 @@ export default function fileManger({ data }: { data: FileItemType[] }) {
             ? `${rate / (1024 * 1024)}Gb`
             : `${rate / 1024}Mb`
           : `${rate}Kb`
-      }
-      /s`;
+      }/s`;
       rateView!.innerText = value;
       console.log(value, rateView);
       startLength = receivedLength;

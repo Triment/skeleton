@@ -2,6 +2,7 @@ import Main from './main';
 import Overlay from './provider/overlay';
 import TopNavigation from './topnavigation';
 import SideNavigation from './sidenavigation';
+import FrontTopNavigation from './topnavigation/front';
 import { useToggle } from './provider/context';
 import { useModal } from './provider/modal';
 import { useRouter } from 'next/router';
@@ -10,7 +11,6 @@ import { Login } from '../components/auth/Login';
 import { withSessionSsr } from '../lib/withSession';
 import { host } from '../config';
 import useUser from '../lib/useUser';
-import FrontTopNavigation from './topnavigation/Front';
 /*	w-[calc(100%-16rem)] class get the remain width of the main component from lg:viewport by subtracting
 (the total width by the width of the side navigation component which is w-64 = 16rem)*/
 
@@ -94,7 +94,7 @@ function DashboardLayout({ children }: ComponentProps<'div'>) {
         >
           <div
             onClick={() => console.log('model')}
-            className={`mx-auto flex flex-col shadow-lg bg-white rounded-2xl p-4 dark:bg-gray-700 w-96 h-36 ease-in duration-300 `}
+            className={`mx-auto flex flex-col shadow-lg bg-white rounded-2xl p-4 dark:bg-gray-700 w-96 h-auto ease-in duration-300 `}
             ref={refOfModal}
           ></div>
         </div>

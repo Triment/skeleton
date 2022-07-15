@@ -24,12 +24,14 @@ class User {
     password: string,
     active: boolean,
     email: string,
+    avatar: string,
     role: Role,
   ) {
     this.username = username;
     this.password = password;
     this.active = active;
     this.email = email;
+    this.avatar = avatar;
     this.role = role;
   }
 
