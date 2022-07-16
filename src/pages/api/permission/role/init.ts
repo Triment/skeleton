@@ -22,6 +22,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     'admin@cd123',
     true,
     '13198898368@163.com',
+    '',
     role,
   );
   await DataBase.manager.save([

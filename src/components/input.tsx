@@ -32,7 +32,6 @@ export function Select<T extends SelectDataType>(
   const [showItem, setShow] = useState(false);
   const selectItem = (e: T) => {
     click(e);
-    console.log(e);
     setShow(false);
   };
   const [selectItems, setItems] = useState<T[]>(props.data);

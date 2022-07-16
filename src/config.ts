@@ -2,9 +2,9 @@ export const host = {
   api: 'http://localhost:3000/api',
 };
 export const config = {
-  fileServerPath: '/Users/triment/Desktop/机房巡检',
-  tokenPrivateKey: '/Users/triment/Desktop/skeleton/src/rsa_private_key.pem',
-  tokenPublicKey: '/Users/triment/Desktop/skeleton/src/rsa_public_key.pem',
+  fileServerPath: '/web/src',
+  tokenPrivateKey: '/web/src/rsa_private_key.pem',
+  tokenPublicKey: '/web/src/rsa_public_key.pem',
   //iron-session config
   sessionConfig: {
     password: 'FF153EC2-224F-438F-B526-D7653B6A8A4B',
@@ -16,6 +16,6 @@ export const config = {
   databaseConfig: {
     username: 'admin',
     password: 'admin@cd123',
-    uri: 'localhost',
+    uri: 'db',
   },
 };

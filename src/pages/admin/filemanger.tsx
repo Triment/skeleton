@@ -117,18 +117,23 @@ export default function fileManger({ data }: { data: FileItemType[] }) {
         <div
           key={index}
           style={{ paddingLeft: `${item.index * 1}rem` }}
-          className={`flex mb-3`}
+          className={`flex mb-3 relative hover:last:flex`}
         >
           {item.type == 'folder' ? <FolderIcon /> : <FileIcon />}
           <span
-            onClick={() => {
+            onClick={(e) => {
               console.log(item);
               item.type === 'file' ? downloadFile(item.fullpath) : null;
+            }}
+            onContextMenu={e=>{
+              e.preventDefault()
+              console.log(e)
             }}
             className="pl-2 hover:text-yellow-500 cursor-pointer ease-in duration-300"
           >
             {item.name}
           </span>
+          <div className="absolute hidden bottom-0 left-0 w-48 h-96 bg-white"></div>
         </div>
       ))}
     </div>

@@ -63,7 +63,8 @@ const UserInfo = ({ isCreate, roles, user, setUser, submit }: UserInfoType) => {
       <CheckBox
         enable={user && user.active}
         label="激活"
-        click={(e) => setUser({ ...user, active: e })}
+        click={(e) =>
+          setUser({ ...user, active: e })}
       />
 
       <Input

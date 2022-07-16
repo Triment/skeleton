@@ -1,6 +1,6 @@
 FROM node:16 AS Node
 COPY . /web
 WORKDIR /web
-RUN npm i 
-ENTRYPOINT ["npm"]
-CMD ["run", "dev"]
+RUN yarn &&  yarn build
+ENTRYPOINT ["yarn"]
+CMD [ "start"]

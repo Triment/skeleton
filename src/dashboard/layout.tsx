@@ -69,7 +69,7 @@ function DashboardLayout({ children }: ComponentProps<'div'>) {
               ></div>
             </div>
           </div>
-          <div className={`flex items-start ${modalOpen ? ' blur-sm' : ''}`}>
+          <div className={`flex items-start ${modalOpen ? ' blur-sm grayscale' : ''}`}>
             <Overlay />
             <SideNavigation mobilePosition="left" />
             <div
@@ -98,7 +98,7 @@ function DashboardLayout({ children }: ComponentProps<'div'>) {
             ref={refOfModal}
           ></div>
         </div>
-        <div className={style.container + `${modalOpen ? ' blur-sm' : ''}`}>
+        <div className={style.container + `${modalOpen ? ' blur-sm grayscale' : ''}`}>
           {children}
         </div>
       </div>
