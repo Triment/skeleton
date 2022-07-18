@@ -22,7 +22,7 @@
   ],
   "scripts": {
     "dev": "next dev -p 81",
-    "build": "next build -p 81",
+    "build": "next build",
     "start": "next start -p 81",
     "lint": "next lint && eslint '*/**/*.{ts,tsx}' --fix",
     "prepare": "husky install",
