@@ -2,7 +2,7 @@ export const host = {
   api: 'http://localhost:3000/api',
 };
 export const config = {
-  fileServerPath: '/web/src',
+  fileServerPath: '/web/fileplace',
   tokenPrivateKey: '/web/src/rsa_private_key.pem',
   tokenPublicKey: '/web/src/rsa_public_key.pem',
   //iron-session config
