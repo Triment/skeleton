@@ -1,5 +1,5 @@
 export const host = {
-  api: 'http://localhost:3000/api',
+  api: 'http://112.44.126.120:81/api',
 };
 export const config = {
   fileServerPath: '/web/文件目录',
