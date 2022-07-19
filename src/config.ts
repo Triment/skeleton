@@ -2,7 +2,7 @@ export const host = {
   api: 'http://112.44.126.120:81/api',
 };
 export const config = {
-  fileServerPath: '/web/fileplace',
+  fileServerPath: '/web/文件目录',
   tokenPrivateKey: '/web/src/rsa_private_key.pem',
   tokenPublicKey: '/web/src/rsa_public_key.pem',
   //iron-session config

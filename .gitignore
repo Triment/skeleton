@@ -37,4 +37,4 @@ yarn-error.log*
 
 # rsa
 *.pem
-/fileplace/*
+/文件目录/*
