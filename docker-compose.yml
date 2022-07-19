@@ -5,7 +5,7 @@ services:
     volumes:
       - ./nginx:/etc/nginx/templates
     ports:
-      - 80:81
+      - 81:80
     depends_on:
       - server
     restart: always
