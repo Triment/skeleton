@@ -7,7 +7,7 @@ export const config = {
   tokenPublicKey: '/web/src/rsa_public_key.pem',
   //iron-session config
   sessionConfig: {
-    password: 'FF153EC2-224F-438F-B526-D7653B6A8A4B',
+    password: 'FF153EC2-224F-438F-B526-D7653B6C8A4B',
     cookieName: 'app_user',
     cookieOptions: {
       secure: false,
