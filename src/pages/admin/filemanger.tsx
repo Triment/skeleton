@@ -81,7 +81,7 @@ export default function fileManger({ data }: { data: FileItemType[] }) {
 
   return (
     <div className="w-ful h-full overflow-y-auto shadow-lg rounded-2xl bg-white p-4">
-      <p className="text-lg font-medium text-sky-500 dark:text-sky-400">登录可享受超高速下载（联系省区IT开通）</p>
+      <p className="text-lg my-4 font-medium text-sky-500 dark:text-sky-400">默认500kb/s下载，登录可享受超高速下载（企业微信联系林帅开通）</p>
       {/* 下载进度条 */}
       <PortalModal>
         <p>{currentFileName}</p>
