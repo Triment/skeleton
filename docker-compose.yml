@@ -8,6 +8,7 @@ services:
       - 80:81
     depends_on:
       - server
+    restart: always
   server:
     build: .
     depends_on:
