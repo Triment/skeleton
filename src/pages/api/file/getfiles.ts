@@ -1,9 +1,9 @@
 import fs from 'fs';
 import { NextApiRequest, NextApiResponse } from 'next';
-import path, { resolve } from 'path';
+import path, { join, resolve } from 'path';
 import { config as globalConfig } from '../../../config';
 
-export const getFileFolder = () => {
+export const getFileFolder = () => {//前后端公用地址
   return globalConfig.fileServerPath;
 };
 
@@ -17,7 +17,6 @@ export type FileItemType = {
 };
 //先序遍历文件夹
 const dfs = (p: string) => {
-  if (!p) return;
   var res = [];
   var name = p.split('/').pop();
   var stack: {
@@ -25,29 +24,30 @@ const dfs = (p: string) => {
     name: string;
     children: string[];
     index: number;
-  }[] = [{ value: p, name: name!, children: fs.readdirSync(p), index: 1 }];
+  }[] = [{ value: p, name: name!, children: fs.readdirSync(resolve(getFileFolder(),p)), index: 1 }];
   while (stack.length > 0) {
     var head = stack.shift()!;
-    const isDIR = fs.statSync(head.value).isDirectory();
+     //console.log(resolve(getFileFolder()))
+    const isDIR = fs.statSync(resolve(getFileFolder(),head.value)).isDirectory();
     let children;
     if (isDIR) {
-      children = fs.readdirSync(head.value).reverse();
+      children = fs.readdirSync(resolve(getFileFolder(),head.value)).reverse();
     }
     res.push({
       name: head.name,
       type: isDIR ? 'folder' : 'file',
       children: children,
-      fullpath: head.value,
+      fullpath: join(head.value, head.name),
       index: head.index,
     });
     if (!isDIR) continue;
     head.children.map((item, i) => {
-      const fullpath = resolve(head.value, item);
+      const fullpath = join(head.value, item);
       stack.unshift({
         value: fullpath,
         name: item,
-        children: fs.statSync(fullpath).isDirectory()
-          ? fs.readdirSync(fullpath).reverse()
+        children: fs.statSync(resolve(getFileFolder(),head.value, item)).isDirectory()
+          ? fs.readdirSync(resolve(getFileFolder(),head.value, item)).reverse()
           : [],
         index: head.index + 1,
       });
@@ -56,8 +56,8 @@ const dfs = (p: string) => {
   return res;
 };
 const handler = (req: NextApiRequest, res: NextApiResponse) => {
-  const filepath = getFileFolder();
-  const data = dfs(filepath);
+  const data = dfs('pages');
+  console.log(data)
   res.status(200).json(data);
 };
 

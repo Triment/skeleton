@@ -10,7 +10,7 @@ export default function HomePage() {
 export const getServerSideProps = ({ req, res }: NextPageContext) => {
   res?.writeHead(301, {
     //首页设置为文件管理器
-    Location: `/admin/filemanger`,
+    Location: `/admin/filespage?fullpath=/`,
   });
   res?.end();
   return {

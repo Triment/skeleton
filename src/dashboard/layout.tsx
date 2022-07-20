@@ -6,7 +6,7 @@ import FrontTopNavigation from './topnavigation/front';
 import { useToggle } from './provider/context';
 import { useModal } from './provider/modal';
 import { useRouter } from 'next/router';
-import { ComponentProps } from 'react';
+import { ComponentProps, useEffect } from 'react';
 import { Login } from '../components/auth/Login';
 import { withSessionSsr } from '../lib/withSession';
 import { host } from '../config';
@@ -22,7 +22,7 @@ const style = {
   main: `h-screen overflow-auto pb-36 pt-8 px-2 md:pb-8 md:pt-4 lg:pt-0`,
 };
 
-const publicMenus = ['/', '/auth/login', '/admin/manger/'];
+const publicMenus = ['/', '/auth/login', '/admin/manger/', '/admin/filemanger','/admin/filespage'];
 
 function DashboardLayout({ children }: ComponentProps<'div'>) {
   const { user, mutateUser } = useUser({
@@ -32,9 +32,9 @@ function DashboardLayout({ children }: ComponentProps<'div'>) {
   const { open } = useToggle();
   const { modalOpen, refOfModal, show } = useModal();
 
-  const { pathname } = useRouter();
+  const { pathname, push } = useRouter();
   let ok = false;
-  console.log(user);
+  console.log(user, pathname);
   publicMenus.map((item) => {
     //公共api
     if (item === pathname) {
@@ -51,6 +51,7 @@ function DashboardLayout({ children }: ComponentProps<'div'>) {
       }
     });
   }
+  console.log(ok)
   if (ok) {
     if (user?.role && user?.role.raw !== 'guest') {
       return (
@@ -105,22 +106,14 @@ function DashboardLayout({ children }: ComponentProps<'div'>) {
     );
   } else {
     //不在公共api中的就返回登录
-    // return <></>
-    return <Login ref={refOfModal} />;
+    const Redirect = ()=>{
+      useEffect(()=>{
+        push('/auth/login')
+      })
+      return <></>
+    }
+     return <Redirect/>
   }
 }
-
-DashboardLayout.getServerSideProps = withSessionSsr(async ({ req }) => {
-  const user = req.session.user;
-  const data = await (await fetch(`${host.api}/auth/getmenu`)).json(); //公共api
-  // ctx.req.redirect(200, '/login/login')
-  //console.log(ctx.req)
-  console.log(user);
-  return {
-    props: {
-      user: user,
-    },
-  };
-});
 
 export default DashboardLayout;

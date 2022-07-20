@@ -12,7 +12,7 @@ const handler = (req: NextApiRequest, res: NextApiResponse) => {
         menus: [
           {
             title: '文件下载',
-            link: '/admin/filemanger',
+            link: '/admin/filespage',
           },
         ],
       },
