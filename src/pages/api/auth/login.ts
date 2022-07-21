@@ -24,9 +24,9 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   //   where: { username: username },
   //   join:
   // });
-  if (!queryUser?.active){
+  if (!queryUser?.active) {
     res.status(401).json({ msg: '账号未激活，请联系管理员' });
-    return
+    return;
   }
   if (!!queryUser && aesEncrypt(password) == queryUser.password) {
     const { password, ...noPwData } = queryUser;

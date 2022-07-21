@@ -11,14 +11,14 @@ import { useRouter } from 'next/router';
 
 export default function fileManger({ data }: { data: FileItemType[] }) {
   //console.log(data)
-  const router = useRouter()
+  const router = useRouter();
   const { show, refOfModal } = useModal();
   const [currentFileName, setDownloadName] = useState<string>(); //modal显示文件名
   const [downloadProgress, setProgress] = useState(0); //下载进度
   const controller = new AbortController();
   const { signal } = controller;
   const { user } = useUser();
-  console.log(router.query)
+  console.log(router.query);
   async function downloadFile(path: string) {
     let paths = path.split('/');
     var filename = paths[paths.length - 1];
@@ -84,7 +84,9 @@ export default function fileManger({ data }: { data: FileItemType[] }) {
 
   return (
     <div className="w-ful h-full overflow-y-auto shadow-lg rounded-2xl bg-white p-4">
-      <p className="text-lg my-4 font-medium text-sky-500 dark:text-sky-400">默认500kb/s下载，登录可享受超高速下载（企业微信联系林帅开通）</p>
+      <p className="text-lg my-4 font-medium text-sky-500 dark:text-sky-400">
+        默认500kb/s下载，登录可享受超高速下载（企业微信联系林帅开通）
+      </p>
       {/* 下载进度条 */}
       <PortalModal>
         <p>{currentFileName}</p>
@@ -127,11 +129,13 @@ export default function fileManger({ data }: { data: FileItemType[] }) {
           <span
             onClick={(e) => {
               console.log(item);
-              item.type === 'file' ? downloadFile(config.fileServerPath+'/'+(item.fullpath)) : null;
+              item.type === 'file'
+                ? downloadFile(config.fileServerPath + '/' + item.fullpath)
+                : null;
             }}
-            onContextMenu={e=>{
-              e.preventDefault()
-              console.log(e)
+            onContextMenu={(e) => {
+              e.preventDefault();
+              console.log(e);
             }}
             className="pl-2 hover:text-yellow-500 cursor-pointer ease-in duration-300"
           >

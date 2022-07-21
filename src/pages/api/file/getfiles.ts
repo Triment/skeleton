@@ -3,7 +3,8 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import path, { join, resolve } from 'path';
 import { config as globalConfig } from '../../../config';
 
-export const getFileFolder = () => {//前后端公用地址
+export const getFileFolder = () => {
+  //前后端公用地址
   return globalConfig.fileServerPath;
 };
 
@@ -24,14 +25,23 @@ const dfs = (p: string) => {
     name: string;
     children: string[];
     index: number;
-  }[] = [{ value: p, name: name!, children: fs.readdirSync(resolve(getFileFolder(),p)), index: 1 }];
+  }[] = [
+    {
+      value: p,
+      name: name!,
+      children: fs.readdirSync(resolve(getFileFolder(), p)),
+      index: 1,
+    },
+  ];
   while (stack.length > 0) {
     var head = stack.shift()!;
-     //console.log(resolve(getFileFolder()))
-    const isDIR = fs.statSync(resolve(getFileFolder(),head.value)).isDirectory();
+    //console.log(resolve(getFileFolder()))
+    const isDIR = fs
+      .statSync(resolve(getFileFolder(), head.value))
+      .isDirectory();
     let children;
     if (isDIR) {
-      children = fs.readdirSync(resolve(getFileFolder(),head.value)).reverse();
+      children = fs.readdirSync(resolve(getFileFolder(), head.value)).reverse();
     }
     res.push({
       name: head.name,
@@ -46,8 +56,10 @@ const dfs = (p: string) => {
       stack.unshift({
         value: fullpath,
         name: item,
-        children: fs.statSync(resolve(getFileFolder(),head.value, item)).isDirectory()
-          ? fs.readdirSync(resolve(getFileFolder(),head.value, item)).reverse()
+        children: fs
+          .statSync(resolve(getFileFolder(), head.value, item))
+          .isDirectory()
+          ? fs.readdirSync(resolve(getFileFolder(), head.value, item)).reverse()
           : [],
         index: head.index + 1,
       });
@@ -57,7 +69,7 @@ const dfs = (p: string) => {
 };
 const handler = (req: NextApiRequest, res: NextApiResponse) => {
   const data = dfs('pages');
-  console.log(data)
+  console.log(data);
   res.status(200).json(data);
 };
 

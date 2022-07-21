@@ -22,7 +22,13 @@ const style = {
   main: `h-screen overflow-auto pb-36 pt-8 px-2 md:pb-8 md:pt-4 lg:pt-0`,
 };
 
-const publicMenus = ['/', '/auth/login', '/admin/manger/', '/admin/filemanger','/admin/filespage'];
+const publicMenus = [
+  '/',
+  '/auth/login',
+  '/admin/manger/',
+  '/admin/filemanger',
+  '/admin/filespage',
+];
 
 function DashboardLayout({ children }: ComponentProps<'div'>) {
   const { user, mutateUser } = useUser({
@@ -51,7 +57,7 @@ function DashboardLayout({ children }: ComponentProps<'div'>) {
       }
     });
   }
-  console.log(ok)
+  console.log(ok);
   if (ok) {
     if (user?.role && user?.role.raw !== 'guest') {
       return (
@@ -70,7 +76,11 @@ function DashboardLayout({ children }: ComponentProps<'div'>) {
               ></div>
             </div>
           </div>
-          <div className={`flex items-start ${modalOpen ? ' blur-sm grayscale' : ''}`}>
+          <div
+            className={`flex items-start ${
+              modalOpen ? ' blur-sm grayscale' : ''
+            }`}
+          >
             <Overlay />
             <SideNavigation mobilePosition="left" />
             <div
@@ -99,20 +109,24 @@ function DashboardLayout({ children }: ComponentProps<'div'>) {
             ref={refOfModal}
           ></div>
         </div>
-        <div className={style.container + `${modalOpen ? ' blur-sm grayscale' : ''}`}>
+        <div
+          className={
+            style.container + `${modalOpen ? ' blur-sm grayscale' : ''}`
+          }
+        >
           {children}
         </div>
       </div>
     );
   } else {
     //不在公共api中的就返回登录
-    const Redirect = ()=>{
-      useEffect(()=>{
-        push('/auth/login')
-      })
-      return <></>
-    }
-     return <Redirect/>
+    const Redirect = () => {
+      useEffect(() => {
+        push('/auth/login');
+      });
+      return <></>;
+    };
+    return <Redirect />;
   }
 }
 

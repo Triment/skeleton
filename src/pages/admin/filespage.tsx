@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { FileIcon, FolderIcon } from '../../components/docs/icons';
 import { Progress } from '../../components/progress';
-import { host } from '../../config';
+import { config, host } from '../../config';
 import { useModal } from '../../dashboard/provider/modal';
 import { PortalModal } from '../../util/Portal';
 import { NextPageContext } from 'next';
@@ -11,24 +11,26 @@ import { useRouter } from 'next/router';
 
 export default function fileManger({ data }: { data: FileItemType[] }) {
   //console.log(data)
-  const router = useRouter()
+  const router = useRouter();
   const { show, refOfModal } = useModal();
   const [currentFileName, setDownloadName] = useState<string>(); //modal显示文件名
   const [downloadProgress, setProgress] = useState(0); //下载进度
-  const getNavBar = (path:string)=>{
-    let b:{value:string; fullpath: string}[] = []
-    let fullptemp = ''
-    for (const t of path.split('/').slice(1)){
-      fullptemp += '/' +t
+  const getNavBar = (path: string) => {
+    let b: { value: string; fullpath: string }[] = [];
+    let fullptemp = '';
+    for (const t of path.split('/').slice(1)) {
+      fullptemp += '/' + t;
       b.push({
         value: t,
-        fullpath: fullptemp
-      })
+        fullpath: fullptemp,
+      });
     }
-    return b
-  }
-  
-  const [currentPath, setCurrentPath] = useState<{value:string; fullpath: string}[]>(getNavBar(router.query.fullpath! as string || '/'))//面包导航栏
+    return b;
+  };
+
+  const [currentPath, setCurrentPath] = useState<
+    { value: string; fullpath: string }[]
+  >(getNavBar((router.query.fullpath! as string) || '/')); //面包导航栏
   const controller = new AbortController();
   const { signal } = controller;
 
@@ -96,29 +98,58 @@ export default function fileManger({ data }: { data: FileItemType[] }) {
 
   return (
     <div className="w-ful h-full overflow-y-auto shadow-lg rounded-2xl bg-white p-5">
-      <p className="text-lg my-4 font-medium text-sky-500 dark:text-sky-400">默认500kb/s下载，登录可享受超高速下载（企业微信联系林帅开通）</p>
+      <p className="text-lg my-4 font-medium text-sky-500 dark:text-sky-400">
+        默认500kb/s下载，登录可享受超高速下载（企业微信联系林帅开通）
+      </p>
       <nav className="flex" aria-label="Breadcrumb">
         <ol className="inline-flex items-center space-x-1 md:space-x-3 my-4">
           <li
-          onClick={e=>{
-            router.push(`/admin/filespage?fullpath=/`); 
-          }} 
-          className="inline-flex items-center">
-            <a href={`/admin/filespage?fullpath=/`} className="inline-flex items-center text-sm font-medium text-blue-400 hover:text-blue-700 dark:text-gray-400 dark:hover:text-white">
-              <svg className="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"></path></svg>
+            onClick={(e) => {
+              router.push(`/admin/filespage?fullpath=/`);
+            }}
+            className="inline-flex items-center"
+          >
+            <a
+              href={`/admin/filespage?fullpath=/`}
+              className="inline-flex items-center text-sm font-medium text-blue-400 hover:text-blue-700 dark:text-gray-400 dark:hover:text-white"
+            >
+              <svg
+                className="w-4 h-4 mr-2"
+                fill="currentColor"
+                viewBox="0 0 20 20"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"></path>
+              </svg>
               根目录
             </a>
           </li>
-          {
-            currentPath.map((item, key)=>{
-              return <li key={key}>
-                      <div  className="flex items-center">
-                        <svg className="w-6 h-6 text-cyan-400 hover:text-cyan-700" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd"></path></svg>
-                        <a href={`/admin/filespage?fullpath=${item.fullpath}`} className="ml-1 text-sm font-medium text-blue-400 hover:text-blue-700 md:ml-2 dark:text-gray-400 dark:hover:text-white">{item.value}</a>
-                      </div>
-                    </li>
-            })
-          }
+          {currentPath.map((item, key) => {
+            return (
+              <li key={key}>
+                <div className="flex items-center">
+                  <svg
+                    className="w-6 h-6 text-cyan-400 hover:text-cyan-700"
+                    fill="currentColor"
+                    viewBox="0 0 20 20"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      fillRule="evenodd"
+                      d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                      clipRule="evenodd"
+                    ></path>
+                  </svg>
+                  <a
+                    href={`/admin/filespage?fullpath=${item.fullpath}`}
+                    className="ml-1 text-sm font-medium text-blue-400 hover:text-blue-700 md:ml-2 dark:text-gray-400 dark:hover:text-white"
+                  >
+                    {item.value}
+                  </a>
+                </div>
+              </li>
+            );
+          })}
         </ol>
       </nav>
       {/* 下载进度条 */}
@@ -154,23 +185,20 @@ export default function fileManger({ data }: { data: FileItemType[] }) {
         </div>
       </PortalModal>
       {data.map((item, index) => (
-        <div
-          key={index}
-          className={`flex mb-3 relative hover:last:flex`}
-        >
+        <div key={index} className={`flex mb-3 relative hover:last:flex`}>
           {item.type == 'folder' ? <FolderIcon /> : <FileIcon />}
           <span
             onClick={(e) => {
-              if(item.type === 'file'){
-                downloadFile(item.fullpath)
+              if (item.type === 'file') {
+                downloadFile(config.fileServerPath + '/' + item.fullpath);
               } else {
-                router.push(`/admin/filespage?fullpath=${item.fullpath}`); 
+                router.push(`/admin/filespage?fullpath=${item.fullpath}`);
                 setCurrentPath(getNavBar(item.fullpath));
-              };
+              }
             }}
-            onContextMenu={e=>{
-              e.preventDefault()
-              console.log("触发上下文菜单")
+            onContextMenu={(e) => {
+              e.preventDefault();
+              console.log('触发上下文菜单');
             }}
             className="pl-2 hover:text-yellow-500 cursor-pointer ease-in duration-300"
           >
@@ -185,7 +213,9 @@ export default function fileManger({ data }: { data: FileItemType[] }) {
 
 export const getServerSideProps = async (ctx: NextPageContext) => {
   const data: FileItemType[] = await (
-    await fetch(`${host.api}/file/getfilebysplit?fullpath=${ctx.query.fullpath}`)
+    await fetch(
+      `${host.api}/file/getfilebysplit?fullpath=${ctx.query.fullpath}`,
+    )
   ).json();
   return {
     props: {

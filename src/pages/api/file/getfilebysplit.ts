@@ -8,17 +8,17 @@ export const getFileFolder = () => {
 };
 
 const handler = (req: NextApiRequest, res: NextApiResponse) => {
-  const filepath = join(getFileFolder(),(req.query.fullpath as string));
-  var data = []
+  const filepath = join(getFileFolder(), req.query.fullpath as string);
+  var data = [];
   for (const t of fs.readdirSync(filepath)) {
     data.push({
       name: t,
       type: fs.statSync(join(filepath, t)).isDirectory() ? 'folder' : 'file',
       children: fs.statSync(join(filepath, t)).isDirectory()
-      ? fs.readdirSync(join(filepath, t)).reverse()
-      : [],
-      fullpath: join((req.query.fullpath as string), t)
-    })
+        ? fs.readdirSync(join(filepath, t)).reverse()
+        : [],
+      fullpath: join(req.query.fullpath as string, t),
+    });
   }
   res.status(200).json(data);
 };
