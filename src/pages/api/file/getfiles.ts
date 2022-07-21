@@ -69,7 +69,6 @@ const dfs = (p: string) => {
 };
 const handler = (req: NextApiRequest, res: NextApiResponse) => {
   const data = dfs('pages');
-  console.log(data);
   res.status(200).json(data);
 };
 

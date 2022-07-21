@@ -10,6 +10,13 @@
             }
         ]
     ],
+    "env": {
+        "production": {
+            "plugins": [
+                "transform-remove-console"
+            ]
+        }
+    },
     "plugins": [
         "babel-plugin-transform-typescript-metadata",
         [
@@ -25,11 +32,16 @@
             }
         ],
         [
-            "@babel/plugin-proposal-private-methods", 
-            { 
+            "@babel/plugin-proposal-private-methods",
+            {
                 "loose": true
             }
         ],
-        ["@babel/plugin-proposal-private-property-in-object", { "loose": true }]
+        [
+            "@babel/plugin-proposal-private-property-in-object",
+            {
+                "loose": true
+            }
+        ]
     ]
 }
