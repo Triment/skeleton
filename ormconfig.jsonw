@@ -1,0 +1,17 @@
+{
+    "type": "mysql",
+    "host": "localhost",
+    "port": 3306,
+    "username": "admin",
+    "password": "admin@cd123",
+    "database": "blog",
+    "entities": [
+       "./src/database/model/*.ts"
+    ],
+    "synchronize": true,
+    "migrationsTableName": "migration_table",
+    "migrations": ["migration/*.js"],
+    "cli": {
+       "migrationsDir": "migration"
+    }
+ }

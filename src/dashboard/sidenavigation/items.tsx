@@ -31,7 +31,9 @@ export default function SidenavItems() {
                   className={`${style.link} 
               ${item.link === asPath && style.active}`}
                 >
-                  <span children={<Icon />} />
+                  <span>
+                    <Icon />
+                  </span>
                   <span className={style.title}>{item.title}</span>
                 </a>
               </Link>

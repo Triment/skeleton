@@ -6,8 +6,9 @@ import { useModal } from '../../dashboard/provider/modal';
 import { PortalModal } from '../../util/Portal';
 import { NextPageContext } from 'next';
 import { FileItemType } from '../api/file/getfiles';
-import useUser from '../../lib/useUser';
+import { getClientIp } from 'request-ip';
 import { useRouter } from 'next/router';
+import { AnalysisCount } from '../../util/Analysis';
 
 export default function fileManger({ data }: { data: FileItemType[] }) {
   //console.log(data)
@@ -212,6 +213,7 @@ export default function fileManger({ data }: { data: FileItemType[] }) {
 }
 
 export const getServerSideProps = async (ctx: NextPageContext) => {
+  await AnalysisCount(ctx);
   const data: FileItemType[] = await (
     await fetch(
       `${host.api}/file/getfilebysplit?fullpath=${ctx.query.fullpath}`,

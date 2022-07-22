@@ -2,12 +2,13 @@ import fs from 'fs';
 import { NextApiRequest, NextApiResponse } from 'next';
 import path, { join, resolve } from 'path';
 import { config as globalConfig } from '../../../config';
+import { withDB } from '../../../util/ApiWrapper';
 
 export const getFileFolder = () => {
   return globalConfig.fileServerPath;
 };
 
-const handler = (req: NextApiRequest, res: NextApiResponse) => {
+const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   const filepath = join(getFileFolder(), req.query.fullpath as string);
   var data = [];
   for (const t of fs.readdirSync(filepath)) {
@@ -29,4 +30,4 @@ export const config = {
   },
 };
 
-export default handler;
+export default withDB(handler);
