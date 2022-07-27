@@ -13,7 +13,13 @@
     "env": {
         "production": {
             "plugins": [
-                "transform-remove-console"
+                "transform-remove-console",
+                [
+                    "babel-plugin-transform-remove-imports",
+                    {
+                        "test": "@babel/core"
+                    }
+                ]
             ]
         }
     },
