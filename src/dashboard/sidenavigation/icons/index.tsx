@@ -16,5 +16,5 @@ Icons.set('setting', SettingsIcon);
 Icons.set('task', TasksIcon);
 Icons.set('time-manage', TimeManageIcon);
 Icons.set('folder', FolderIcon);
-
+Icons.set('search', FolderIcon);
 export { Icons };

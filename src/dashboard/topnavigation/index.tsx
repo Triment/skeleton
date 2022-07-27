@@ -75,7 +75,7 @@ export default function TopNavigation() {
               src={user?.avatar}
               className="h-10 w-10 flex-none rounded-full"
             />
-            <p>登出 </p>
+            <p>登出 11</p>
           </div>
         </div>
       </div>
