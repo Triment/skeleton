@@ -1,10 +1,5 @@
 import {
-  Column,
-  Entity,
-  PrimaryGeneratedColumn,
-  Index,
-  CreateDateColumn,
-  UpdateDateColumn,
+  Column, CreateDateColumn, Entity, Index, PrimaryGeneratedColumn, UpdateDateColumn
 } from 'typeorm';
 
 @Entity()

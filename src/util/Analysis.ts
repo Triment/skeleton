@@ -1,9 +1,9 @@
 import { getCookie, setCookie } from 'cookies-next';
+import { randomUUID } from 'crypto';
 import { NextPageContext } from 'next';
 import { getClientIp } from 'request-ip';
-import { Analysis } from '../database/model';
 import { DataBase } from '../database';
-import { randomUUID } from 'crypto';
+import { Analysis } from '../database/model';
 
 export const AnalysisCount = async ({ req, res }: NextPageContext) => {
   if (!DataBase.isInitialized) await DataBase.initialize();

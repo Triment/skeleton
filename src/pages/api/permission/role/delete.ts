@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { DataBase } from '../../../../database';
-import { Menu, Role } from '../../../../database/model';
+import { Role } from '../../../../database/model';
 import { withDB } from '../../../../util/ApiWrapper';
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {

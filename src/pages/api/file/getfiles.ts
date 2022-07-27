@@ -1,6 +1,6 @@
 import fs from 'fs';
 import { NextApiRequest, NextApiResponse } from 'next';
-import path, { join, resolve } from 'path';
+import { join, resolve } from 'path';
 import { config as globalConfig } from '../../../config';
 
 export const getFileFolder = () => {

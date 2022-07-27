@@ -1,7 +1,7 @@
 //swr获取用户信息接口
 //此部分埋下了c端的effect代码，会导致浏览器本地导航变化
-import { useEffect } from 'react';
 import Router from 'next/router';
+import { useEffect } from 'react';
 import useSWR from 'swr';
 import { UserType } from '../redux/userSlice';
 

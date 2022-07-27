@@ -1,5 +1,4 @@
-import { useEffect, useState } from 'react';
-import { Input } from '../../../components/input';
+import { useState } from 'react';
 import { host } from '../../../config';
 
 export default function Mdp() {

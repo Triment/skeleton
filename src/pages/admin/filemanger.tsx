@@ -1,13 +1,13 @@
+import { NextPageContext } from 'next';
+import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { FileIcon, FolderIcon } from '../../components/docs/icons';
 import { Progress } from '../../components/progress';
 import { config, host } from '../../config';
 import { useModal } from '../../dashboard/provider/modal';
-import { PortalModal } from '../../util/Portal';
-import { NextPageContext } from 'next';
-import { FileItemType } from '../api/file/getfiles';
 import useUser from '../../lib/useUser';
-import { useRouter } from 'next/router';
+import { PortalModal } from '../../util/Portal';
+import { FileItemType } from '../api/file/getfiles';
 
 export default function fileManger({ data }: { data: FileItemType[] }) {
   //console.log(data)

@@ -1,9 +1,6 @@
 import {
-  Entity,
-  PrimaryGeneratedColumn,
-  Column,
-  ManyToOne,
-  OneToMany,
+  Column, Entity, ManyToOne,
+  OneToMany, PrimaryGeneratedColumn
 } from 'typeorm';
 import { Comment } from './comment';
 import { User } from './user';

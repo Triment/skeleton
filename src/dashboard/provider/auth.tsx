@@ -1,5 +1,4 @@
-import { useContext } from 'react';
-import { Menu, User, Role } from '../../database/model';
+import { Menu, Role, User } from '../../database/model';
 
 export type UserContextType = Omit<User, 'role'> & {
   role: Omit<Role, 'menus'> & {

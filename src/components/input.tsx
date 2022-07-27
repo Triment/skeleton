@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { host } from '../config';
-import { Role } from '../database/model';
 
 export const Input: React.FC<
   { label: string } & React.ComponentProps<'input'>

@@ -2,9 +2,7 @@ import { NextPageContext } from 'next';
 import { FC, useState } from 'react';
 import { FolderIcon } from '../../../components/docs/icons';
 import {
-  EditBarType,
-  ModalActiontype,
-  withManger,
+  EditBarType, withManger
 } from '../../../components/hoc/manger';
 import { host } from '../../../config';
 import { useModal } from '../../../dashboard/provider/modal';

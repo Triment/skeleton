@@ -1,5 +1,3 @@
-import Router from 'next/router';
-import { useEffect } from 'react';
 import { NextPageContext } from 'next';
 import Content from '../components/content';
 

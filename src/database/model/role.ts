@@ -1,12 +1,5 @@
 import {
-  Entity,
-  PrimaryGeneratedColumn,
-  Column,
-  ManyToOne,
-  OneToMany,
-  JoinTable,
-  Relation,
-  ManyToMany,
+  Column, Entity, JoinTable, ManyToMany, OneToMany, PrimaryGeneratedColumn
 } from 'typeorm';
 import { User } from './user';
 

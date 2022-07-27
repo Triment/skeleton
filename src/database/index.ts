@@ -1,7 +1,7 @@
 import 'reflect-metadata';
 import { DataSource } from 'typeorm';
 import { config } from '../config';
-import { Comment, User, Post, Menu, Role, Analysis } from './model';
+import { Analysis, Comment, Menu, Post, Role, User } from './model';
 
 const DataBase = new DataSource({
   type: 'mysql',

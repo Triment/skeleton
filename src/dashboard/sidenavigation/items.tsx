@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import React, { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { Menu } from '../../database/model';
 import useUser from '../../lib/useUser';
 

@@ -1,8 +1,4 @@
-import HomeIcon from './icons/home';
-import TasksIcon from './icons/tasks';
 import FolderIcon from './icons/folder';
-import ProjectsIcon from './icons/projects';
-import DocumentationIcon from './icons/documentation';
 
 const data = [
   // {

@@ -2,7 +2,7 @@ import { withIronSessionApiRoute, withIronSessionSsr } from 'iron-session/next';
 import {
   GetServerSidePropsContext,
   GetServerSidePropsResult,
-  NextApiHandler,
+  NextApiHandler
 } from 'next';
 import { config } from '../config';
 

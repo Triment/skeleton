@@ -1,5 +1,4 @@
-import React, { FC, useState } from 'react';
-import { useModal } from '../../dashboard/provider/modal';
+import React, { FC } from 'react';
 import { PortalModal } from '../../util/Portal';
 
 export type EditBarType = {

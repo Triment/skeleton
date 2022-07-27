@@ -1,13 +1,13 @@
+import { AppProps } from 'next/app';
 import Head from 'next/head';
+import { Provider } from 'react-redux';
+import { SWRConfig } from 'swr';
 import 'tailwindcss/tailwind.css';
 import DashboardLayout from '../dashboard/layout';
 import DashboardProvider from '../dashboard/provider/context';
 import ModelProvider from '../dashboard/provider/modal';
-import { Provider } from 'react-redux';
-import store from '../redux/store';
-import { AppProps } from 'next/app';
-import { SWRConfig } from 'swr';
 import fetchJson from '../lib/fetchJson';
+import store from '../redux/store';
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (

@@ -1,7 +1,7 @@
-import SidenavItems from './items';
-import SidenavHeader from './header';
-import css from './style.module.css';
 import { useToggle } from '../provider/context';
+import SidenavHeader from './header';
+import SidenavItems from './items';
+import css from './style.module.css';
 
 const style = {
   mobilePosition: {

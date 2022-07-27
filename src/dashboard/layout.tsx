@@ -1,16 +1,13 @@
-import Main from './main';
-import Overlay from './provider/overlay';
-import TopNavigation from './topnavigation';
-import SideNavigation from './sidenavigation';
-import FrontTopNavigation from './topnavigation/front';
-import { useToggle } from './provider/context';
-import { useModal } from './provider/modal';
 import { useRouter } from 'next/router';
 import { ComponentProps, useEffect } from 'react';
-import { Login } from '../components/auth/Login';
-import { withSessionSsr } from '../lib/withSession';
-import { host } from '../config';
 import useUser from '../lib/useUser';
+import Main from './main';
+import { useToggle } from './provider/context';
+import { useModal } from './provider/modal';
+import Overlay from './provider/overlay';
+import SideNavigation from './sidenavigation';
+import TopNavigation from './topnavigation';
+import FrontTopNavigation from './topnavigation/front';
 /*	w-[calc(100%-16rem)] class get the remain width of the main component from lg:viewport by subtracting
 (the total width by the width of the side navigation component which is w-64 = 16rem)*/
 

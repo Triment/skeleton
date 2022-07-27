@@ -1,13 +1,13 @@
-import { DataBase } from '../../../database';
-import { Menu, User } from '../../../database/model';
-import { aesEncrypt } from '../../../database/model/user';
-import { withDB } from '../../../util/ApiWrapper';
-import { sign, verify } from 'jsonwebtoken';
-import { config } from '../../../config';
-import { NextApiRequest, NextApiResponse } from 'next';
 import { readFileSync } from 'fs';
-import { UserStore, UserType } from '../../../redux/userSlice';
+import { sign } from 'jsonwebtoken';
+import { NextApiRequest, NextApiResponse } from 'next';
+import { config } from '../../../config';
+import { DataBase } from '../../../database';
+import { User } from '../../../database/model';
+import { aesEncrypt } from '../../../database/model/user';
 import { withSessionRoute } from '../../../lib/withSession';
+import { UserType } from '../../../redux/userSlice';
+import { withDB } from '../../../util/ApiWrapper';
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   const { username, password } = JSON.parse(req.body);
   const queryUser = await DataBase.getRepository(User)

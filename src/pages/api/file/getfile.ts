@@ -1,11 +1,9 @@
-import { getFileFolder } from './getfiles';
-import { resolve } from 'path';
 import { createReadStream, existsSync, statSync } from 'fs';
 
-import { Throttle } from 'stream-throttle';
 import { NextApiRequest, NextApiResponse } from 'next';
-import { withSessionRoute } from '../../../lib/withSession';
+import { Throttle } from 'stream-throttle';
 import UrlEncode from 'urlencode';
+import { withSessionRoute } from '../../../lib/withSession';
 const handler = (req: NextApiRequest, res: NextApiResponse) => {
   //runMiddleware(res,req,thorttle)
   const { getPath } = req.query;
