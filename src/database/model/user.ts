@@ -1,10 +1,11 @@
 import { createHmac } from 'crypto';
 import {
-  BeforeInsert, BeforeUpdate, Column, Entity, JoinTable, ManyToOne, OneToMany, PrimaryGeneratedColumn
+  BeforeInsert, BeforeUpdate, Column, Entity, JoinTable, ManyToOne, OneToMany, PrimaryGeneratedColumn, Relation
 } from 'typeorm';
 import { Comment } from './comment';
 import { Post } from './post';
 import { Role } from './role';
+import { UploadLog } from './upload';
 export function aesEncrypt(data: string) {
   const hmac = createHmac('sha256', process.env.SECRET_KEY || 'complaint');
   return hmac.update(data).digest('hex');
@@ -61,6 +62,10 @@ class User {
   @Column('simple-array', { select: false, nullable: true })
   @OneToMany(() => Comment, (comment) => comment.author)
   comments!: Comment[];
+
+  @Column('simple-array', { select: false, nullable: true })
+  @OneToMany(() => UploadLog, (UploadLog) => UploadLog.uploadUser)
+  uploadFiles!: Relation<UploadLog>[];
 
   @BeforeInsert()
   async hashPassword() {

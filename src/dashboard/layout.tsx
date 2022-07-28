@@ -30,7 +30,6 @@ const publicMenus = [
 
 function DashboardLayout({ children }: ComponentProps<'div'>) {
   const { user, mutateUser } = useUser({
-    redirectTo: '/',
     redirectIfFound: true,
   });
   const { open } = useToggle();

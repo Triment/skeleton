@@ -91,7 +91,7 @@ export default function Mdp() {
                             orgItem.sourceType !== 3 ? 'hidden ' : ''
                           }px-2 py-1 flex items-center text-xs rounded-md text-black-400 font-semibold bg-yellow-400`}
                         >
-                          银河{orgItem.sourceType}
+                          银河
                         </span>
                         <span className="text-gray-500">组织机构:</span>&nbsp;
                         {orgItem.orgName}

@@ -1,10 +1,12 @@
 import { NextPageContext } from 'next';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
+import { FieldValues, useForm } from 'react-hook-form';
 import { FileIcon, FolderIcon } from '../../components/docs/icons';
 import { Progress } from '../../components/progress';
 import { config, host } from '../../config';
 import { useModal } from '../../dashboard/provider/modal';
+import useUser from '../../lib/useUser';
 import { AnalysisCount } from '../../util/Analysis';
 import { PortalModal } from '../../util/Portal';
 import { FileItemType } from '../api/file/getfiles';
@@ -27,7 +29,7 @@ export default function fileManger({ data }: { data: FileItemType[] }) {
     }
     return b;
   };
-
+  const { register, handleSubmit } = useForm();//上传控制
   const [currentPath, setCurrentPath] = useState<
     { value: string; fullpath: string }[]
   >(getNavBar((router.query.fullpath! as string) || '/')); //面包导航栏
@@ -58,13 +60,12 @@ export default function fileManger({ data }: { data: FileItemType[] }) {
       //速度和定时器的时间有关系这里是0.5s 所以应当乘以二得到秒速
       const rateView = document.getElementById('download-rate');
       let rate: number = ((receivedLength - startLength) * 4) / 1024;
-      const value = `${
-        rate > 1024
+      const value = `${rate > 1024
           ? rate > 1024 * 1024
             ? `${rate / (1024 * 1024)}Gb`
             : `${rate / 1024}Mb`
           : `${rate}Kb`
-      }/s`;
+        }/s`;
       rateView!.innerText = value;
       startLength = receivedLength;
     }, 250);
@@ -94,6 +95,31 @@ export default function fileManger({ data }: { data: FileItemType[] }) {
       show();
       setProgress(0);
     }, 1000);
+  }
+  const { user } = useUser({
+
+  })
+
+
+  const uploadFiles = async (d: FieldValues) => {
+    if (d.file.length > 0) {
+      const formData = new FormData()
+      formData.append('path', router.query.fullpath as string)
+      for (const file of d.file) {
+        formData.append(file.name, file)
+        // formData.append('file', file)
+        // formData.append('path', router.query.fullpath as string)
+
+        // console.log(data)
+      }
+      const data = await fetch(`${host.api}/file/upload`, {
+        method: 'POST',
+        body: formData
+      })
+      router.push('/admin/filespage', {
+        query: router.query
+      })
+    }
   }
 
   return (
@@ -163,9 +189,8 @@ export default function fileManger({ data }: { data: FileItemType[] }) {
             ''
           ) : (
             <div
-              className={`${
-                downloadProgress == 100 ? 'opacity-100' : 'opacity-0'
-              }`}
+              className={`${downloadProgress == 100 ? 'opacity-100' : 'opacity-0'
+                }`}
             >
               下载完成
               <svg
@@ -207,6 +232,10 @@ export default function fileManger({ data }: { data: FileItemType[] }) {
           <div className="absolute hidden bottom-0 left-0 w-48 h-96 bg-white"></div>
         </div>
       ))}
+      <form className={user?.username!=='guest'?"":"hidden"} onSubmit={handleSubmit((d) => uploadFiles(d))}>
+        <input multiple type="file" {...register("file")} />
+        <input type="submit" />
+      </form>
     </div>
   );
 }
