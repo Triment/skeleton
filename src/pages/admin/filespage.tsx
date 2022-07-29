@@ -235,8 +235,12 @@ export default function fileManger({ data }: { data: FileItemType[] }) {
         className={user?.username !== 'guest' ? '' : 'hidden'}
         onSubmit={handleSubmit((d) => uploadFiles(d))}
       >
-        <input multiple type="file" {...register('file')} />
-        <input type="submit" />
+        <label className="block">
+          <span className="sr-only">选择文件</span>
+          <input {...register('file')} multiple type="file" className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"/>
+        </label>
+        <input 
+        className="mt-4 cursor-pointer text-gray-500 text-sm hover:text-blue-500 hover:bg-blue-50 bg-gray-50 rounded-full px-4 py-2" type="submit"  />
       </form>
     </div>
   );

@@ -1,4 +1,6 @@
 import { useRouter } from 'next/router';
+import { useEffect } from 'react';
+import { config, host } from '../../config';
 import fetchJson from '../../lib/fetchJson';
 import useUser from '../../lib/useUser';
 import { useToggle } from '../provider/context';
@@ -10,6 +12,9 @@ export default function TopNavigation() {
     redirectIfFound: true,
   });
   const router = useRouter();
+  useEffect(()=>{
+    console.log(`avatar ${user?.avatar}`)
+  })
   return (
     <header className="bg-white h-16 items-center relative shadow w-full z-10 md:h-20 lg:rounded-2xl">
       <div className="flex flex-center flex-col h-full justify-center mx-auto px-3 relative">
@@ -72,7 +77,7 @@ export default function TopNavigation() {
           >
             <img
               alt={user?.username}
-              src={user?.avatar}
+              src={`${host.api}/file/getfile?getPath=${config.fileServerPath}/${user?.avatar}`}
               className="h-10 w-10 flex-none rounded-full"
             />
             <p>登出</p>

@@ -6,7 +6,7 @@ function Login() {
   const [username, setUserName] = useState('');
   const [password, setPassword] = useState('');
   const { mutateUser } = useUser({
-    redirectTo: '/',
+    redirectTo: '/admin/filespage?fullpath=/',
     redirectIfFound: true,
   });
   const submit = async () => {

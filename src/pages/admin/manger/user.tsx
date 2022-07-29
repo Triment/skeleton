@@ -4,7 +4,7 @@ import { NextPageContext } from 'next';
 import { useState } from 'react';
 import { CheckBox } from '../../../components/checkbox';
 import { Input, Select, SelectDataType } from '../../../components/input';
-import { host } from '../../../config';
+import { config, host } from '../../../config';
 import { useModal } from '../../../dashboard/provider/modal';
 import { AddIcon } from '../../../dashboard/sidenavigation/icons/add';
 import { Role, User } from '../../../database/model';
@@ -21,6 +21,25 @@ type UserInfoType = {
   isCreate: boolean;
 };
 const UserInfo = ({ isCreate, roles, user, setUser, submit }: UserInfoType) => {
+  const convert2base64 = (f:File)  => {
+    const reader = new FileReader()
+    reader.onloadend = ()=>{
+      setUser({ ...user, avatar: reader.result?.toString()})
+    }
+    reader.readAsDataURL(f)
+  }
+  const uploadAvatar = async(e:React.ChangeEvent<HTMLInputElement>) => {
+    //convert2base64(e.currentTarget.files![0])
+    const form = new FormData()
+    form.append('path', '/avatar')
+    form.append(e.target.files![0].name, e.target.files![0])
+    const data = await (await fetch(`${host.api}/file/upload`, {
+      method: 'POST',
+      body: form,
+    })).json();
+    console.log(e.target.files)
+    setUser({ ...user, avatar: data[e.target.files![0].name]})
+  }
   return (
     <div className="shadow-lg bg-white rounded-2xl p-4 w-auto h-auto first:mt-4 last:mb-4">
       <Input
@@ -33,16 +52,21 @@ const UserInfo = ({ isCreate, roles, user, setUser, submit }: UserInfoType) => {
         value={user && user.username}
         placeholder={user && user.username}
       />
-      <Input
-        className="my-4"
-        label="头像"
-        type="text"
-        onChange={(e) => {
-          setUser({ ...user, avatar: e.currentTarget.value });
-        }}
-        value={user && user.avatar}
-        placeholder={user && user.avatar}
-      />
+      <div className="my-2">
+      <label className="block text-sm font-medium text-gray-700">头像</label>
+      <form className="flex items-center space-x-6">
+        <div className="shrink-0">
+          {user&&user.avatar&&<img className="object-cover w-16 h-16 rounded-full shadow-xl"
+            src={`${host.api}/file/getfile?getPath=${config.fileServerPath}/${user.avatar}`} alt="头像" />}
+        </div>
+        <label className="block">
+          <input
+            onChange={e=>uploadAvatar(e)}
+            type="file"
+            className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100" />
+        </label>
+      </form>
+      </div>
       <Input
         className="my-4"
         label="密码"

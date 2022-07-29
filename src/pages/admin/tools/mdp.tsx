@@ -22,7 +22,7 @@ export default function Mdp() {
           onChange={(e) => {
             setPhone(e.currentTarget.value);
           }}
-          className="border-2 border-gray-300 bg-white h-10 px-5 pr-16 rounded-lg text-sm focus:outline-none"
+          className="border-2 border-gray-300 bg-white h-10 px-5 pr-6 rounded-lg text-sm focus:outline-none"
           type="search"
           name="search"
           placeholder="输入手机号"
