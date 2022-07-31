@@ -13,7 +13,6 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     body.password,
     body.active,
     body.email,
-    body.avatar,
     role!,
   );
   const data = await DataBase.manager.save(user);
