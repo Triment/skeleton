@@ -39,65 +39,65 @@ export default function fileManger({ data }: { data: FileItemType[] }) {
   async function downloadFile(path: string) {
     await fetch(`/api/file/getfile?getPath=${path}`)
     return 
-    let paths = path.split('/');
-    var filename = paths[paths.length - 1];
-    if (filename === currentFileName) {
-      show();
-      return;
-    }
-    setDownloadName(filename);
-    //下载
-    show();
-    const response = await fetch(`/api/file/getfile?getPath=${path}`, {
-      signal,
-    });
-    const reader = response!.body!.getReader();
-    const contentLength = response.headers.get('Content-Length');
-    //console.log(refOfModal.current);
-    //console.log(contentLength, '内容大小')
-    let receivedLength = 0;
-    let chunks: Uint8Array[] = new Array<Uint8Array>();
-    var startLength = 0;
-    const rateInterval = setInterval(() => {
-      //速度和定时器的时间有关系这里是0.5s 所以应当乘以二得到秒速
-      const rateView = document.getElementById('download-rate');
-      let rate: number = ((receivedLength - startLength) * 4) / 1024;
-      const value = `${
-        rate > 1024
-          ? rate > 1024 * 1024
-            ? `${rate / (1024 * 1024)}Gb`
-            : `${rate / 1024}Mb`
-          : `${rate}Kb`
-      }/s`;
-      rateView!.innerText = value;
-      startLength = receivedLength;
-    }, 250);
-    while (true) {
-      const { done, value } = await reader.read();
-      if (done) {
-        break;
-      }
-      chunks.push(value);
-      receivedLength += value.length;
-      let prog = (receivedLength / parseInt(contentLength!)) * 100;
-      prog === downloadProgress ? '' : setProgress(prog);
-      //setProgress(prog===downloadProgress?)
-    }
-    clearInterval(rateInterval);
-    let blob = new Blob(chunks);
-    var a = document.createElement('a'); //control+C+V大法好🐮🍺
-    document.body.appendChild(a); //兼容火狐，将a标签添加到body当中
-    var url = window.URL.createObjectURL(blob); // 获取 blob 本地文件连接 (blob 为纯二进制对象，不能够直接保存到磁盘上)
-    a.href = url;
-    a.download = filename;
-    a.target = '_blank'; // a标签增加target属性
-    a.click();
-    a.remove(); //移除a标签
-    window.URL.revokeObjectURL(url);
-    setTimeout(() => {
-      show();
-      setProgress(0);
-    }, 1000);
+    // let paths = path.split('/');
+    // var filename = paths[paths.length - 1];
+    // if (filename === currentFileName) {
+    //   show();
+    //   return;
+    // }
+    // setDownloadName(filename);
+    // //下载
+    // show();
+    // const response = await fetch(`/api/file/getfile?getPath=${path}`, {
+    //   signal,
+    // });
+    // const reader = response!.body!.getReader();
+    // const contentLength = response.headers.get('Content-Length');
+    // //console.log(refOfModal.current);
+    // //console.log(contentLength, '内容大小')
+    // let receivedLength = 0;
+    // let chunks: Uint8Array[] = new Array<Uint8Array>();
+    // var startLength = 0;
+    // const rateInterval = setInterval(() => {
+    //   //速度和定时器的时间有关系这里是0.5s 所以应当乘以二得到秒速
+    //   const rateView = document.getElementById('download-rate');
+    //   let rate: number = ((receivedLength - startLength) * 4) / 1024;
+    //   const value = `${
+    //     rate > 1024
+    //       ? rate > 1024 * 1024
+    //         ? `${rate / (1024 * 1024)}Gb`
+    //         : `${rate / 1024}Mb`
+    //       : `${rate}Kb`
+    //   }/s`;
+    //   rateView!.innerText = value;
+    //   startLength = receivedLength;
+    // }, 250);
+    // while (true) {
+    //   const { done, value } = await reader.read();
+    //   if (done) {
+    //     break;
+    //   }
+    //   chunks.push(value);
+    //   receivedLength += value.length;
+    //   let prog = (receivedLength / parseInt(contentLength!)) * 100;
+    //   prog === downloadProgress ? '' : setProgress(prog);
+    //   //setProgress(prog===downloadProgress?)
+    // }
+    // clearInterval(rateInterval);
+    // let blob = new Blob(chunks);
+    // var a = document.createElement('a'); //control+C+V大法好🐮🍺
+    // document.body.appendChild(a); //兼容火狐，将a标签添加到body当中
+    // var url = window.URL.createObjectURL(blob); // 获取 blob 本地文件连接 (blob 为纯二进制对象，不能够直接保存到磁盘上)
+    // a.href = url;
+    // a.download = filename;
+    // a.target = '_blank'; // a标签增加target属性
+    // a.click();
+    // a.remove(); //移除a标签
+    // window.URL.revokeObjectURL(url);
+    // setTimeout(() => {
+    //   show();
+    //   setProgress(0);
+    // }, 1000);
   }
   const { user } = useUser({});
 
