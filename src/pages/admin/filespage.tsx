@@ -37,6 +37,8 @@ export default function fileManger({ data }: { data: FileItemType[] }) {
   const { signal } = controller;
 
   async function downloadFile(path: string) {
+    await fetch(`/api/file/getfile?getPath=${path}`)
+    return 
     let paths = path.split('/');
     var filename = paths[paths.length - 1];
     if (filename === currentFileName) {
