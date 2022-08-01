@@ -13,7 +13,7 @@ const handler = (req: NextApiRequest, res: NextApiResponse) => {
     res.setHeader('Content-Type', 'application/octet-stream');
     res.setHeader(
       'Content-Disposition',
-      `attachment; filename*=UTF-8${UrlEncode(filename!)}`,
+      `attachment; filename=${UrlEncode(filename!)}`,
     );
     res.setHeader('Content-Length', stat.size);
     const rate =

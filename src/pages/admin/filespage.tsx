@@ -37,7 +37,18 @@ export default function fileManger({ data }: { data: FileItemType[] }) {
   const { signal } = controller;
 
   async function downloadFile(path: string) {
-    await fetch(`/api/file/getfile?getPath=${path}`)
+    // await fetch(`/api/file/getfile?getPath=${path}`)
+
+    var a = document.createElement('a'); //control+C+V大法好🐮🍺
+    document.body.appendChild(a); //兼容火狐，将a标签添加到body当中
+    //var url = window.URL.createObjectURL(blob); // 获取 blob 本地文件连接 (blob 为纯二进制对象，不能够直接保存到磁盘上)
+    const url = `/api/file/getfile?getPath=${path}`
+    a.href = url;
+    a.target = '_self'; // a标签增加target属性
+    a.click();
+    a.remove(); //移除a标签
+    window.URL.revokeObjectURL(url);
+
     return 
     // let paths = path.split('/');
     // var filename = paths[paths.length - 1];
