@@ -7,14 +7,16 @@ import { withSessionRoute } from '../../../lib/withSession';
 const handler = (req: NextApiRequest, res: NextApiResponse) => {
   //runMiddleware(res,req,thorttle)
   const { getPath } = req.query;
-  const stat = statSync(getPath as string);
-  let filename = (getPath as string)!.split('/').pop();
   if (existsSync(getPath as string)) {
-    res.setHeader('Content-Type', 'application/octet-stream');
-    res.setHeader(
-      'Content-Disposition',
-      `attachment; filename=${UrlEncode(filename!)}`,
-    );
+    const stat = statSync(getPath as string);
+    let filename = (getPath as string)!.split('/').pop();
+    if (filename?.split('.').pop()?.toLocaleLowerCase() !== '.md') {
+      res.setHeader('Content-Type', 'application/octet-stream');
+      res.setHeader(
+        'Content-Disposition',
+        `attachment; filename=${UrlEncode(filename!)}`,
+      );
+    }
     res.setHeader('Content-Length', stat.size);
     const rate =
       req.session && !!req.session.user
@@ -23,7 +25,8 @@ const handler = (req: NextApiRequest, res: NextApiResponse) => {
     createReadStream(getPath as string)
       .pipe(new Throttle({ rate: 1024 * rate }))
       .pipe(res);
-  }
+  } else
+  res.status(404).json({msg: "not found"})
 };
 
 export const config = {

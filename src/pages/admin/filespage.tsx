@@ -1,7 +1,9 @@
 import { NextPageContext } from 'next';
 import { useRouter } from 'next/router';
-import { useState } from 'react';
+import { join } from 'path';
+import { useEffect, useState } from 'react';
 import { FieldValues, useForm } from 'react-hook-form';
+import ReactMarkdown from 'react-markdown';
 import { FileIcon, FolderIcon } from '../../components/docs/icons';
 import { Progress } from '../../components/progress';
 import { config, host } from '../../config';
@@ -133,6 +135,15 @@ export default function fileManger({ data }: { data: FileItemType[] }) {
     }
   };
 
+  const [readme, setReadme] = useState('')
+
+  useEffect(()=>{
+    fetch(`${host.api}/file/getfile?getPath=${join(config.fileServerPath,router.query.fullpath as string, 'readme.md')}`).then(res=>{
+      return res.text()
+    }).then(data=>{
+      setReadme(data)
+    })
+  })
   return (
     <div className="w-ful h-full overflow-y-auto shadow-lg rounded-2xl bg-white p-5">
       <p className="text-lg my-4 font-medium text-sky-500 dark:text-sky-400">
@@ -221,7 +232,7 @@ export default function fileManger({ data }: { data: FileItemType[] }) {
           )}
         </div>
       </PortalModal>
-      {data.map((item, index) => (
+      {data.map((item, index) => item.name != 'readme.md' ? (
         <div key={index} className={`flex mb-3 relative hover:last:flex`}>
           {item.type == 'folder' ? <FolderIcon /> : <FileIcon />}
           <span
@@ -243,7 +254,8 @@ export default function fileManger({ data }: { data: FileItemType[] }) {
           </span>
           <div className="absolute hidden bottom-0 left-0 w-48 h-96 bg-white"></div>
         </div>
-      ))}
+      ): null)}
+      <ReactMarkdown className='rounded-xl bg-gray-500 text-white p-4'>{readme}</ReactMarkdown>
       <form
         className={user?.username !== 'guest' ? '' : 'hidden'}
         onSubmit={handleSubmit((d) => uploadFiles(d))}
