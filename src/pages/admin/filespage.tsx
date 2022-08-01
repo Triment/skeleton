@@ -266,7 +266,7 @@ export default function fileManger({ data }: { data: FileItemType[] }) {
           </div>
         ) : null,
       )}
-      {readme.length > 0 && <ReactMarkdown className="rounded-xl bg-gray-500 text-white p-4">
+      {readme.length > 0 && <ReactMarkdown className="rounded-xl shadow-xl bg-gray-500 text-white p-4 m-2">
         {readme}
       </ReactMarkdown>}
       <form
