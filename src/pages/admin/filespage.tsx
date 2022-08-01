@@ -146,10 +146,12 @@ export default function fileManger({ data }: { data: FileItemType[] }) {
       )}`,
     )
       .then((res) => {
-        return res.text();
+        if (res.status == 200)
+          return res.text();
       })
       .then((data) => {
-        setReadme(data);
+        if (data)
+          setReadme(data);
       });
   });
   return (
@@ -219,9 +221,8 @@ export default function fileManger({ data }: { data: FileItemType[] }) {
             ''
           ) : (
             <div
-              className={`${
-                downloadProgress == 100 ? 'opacity-100' : 'opacity-0'
-              }`}
+              className={`${downloadProgress == 100 ? 'opacity-100' : 'opacity-0'
+                }`}
             >
               下载完成
               <svg
@@ -265,9 +266,9 @@ export default function fileManger({ data }: { data: FileItemType[] }) {
           </div>
         ) : null,
       )}
-      <ReactMarkdown className="rounded-xl bg-gray-500 text-white p-4">
+      {readme.length > 0 && <ReactMarkdown className="rounded-xl bg-gray-500 text-white p-4">
         {readme}
-      </ReactMarkdown>
+      </ReactMarkdown>}
       <form
         className={user?.username !== 'guest' ? '' : 'hidden'}
         onSubmit={handleSubmit((d) => uploadFiles(d))}
