@@ -12,7 +12,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       resolve({ fields, files });
     });
   });
-  console.log(data)
+  console.log(data);
   //fields: { path: [ '/' ] }, files: { file:
   let result = new Map<string, string>();
   for (const filename of Object.keys((data as any).files)) {
@@ -24,9 +24,13 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         (data as any).files[filename][0].originalFilename,
       ),
     );
-    result.set(filename, join((data as any).fields.path[0] as string,
-      (data as any).files[filename][0].originalFilename,
-    ));
+    result.set(
+      filename,
+      join(
+        (data as any).fields.path[0] as string,
+        (data as any).files[filename][0].originalFilename,
+      ),
+    );
   }
   res.status(200).json(Object.fromEntries(result));
 };

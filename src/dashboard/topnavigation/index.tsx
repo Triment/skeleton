@@ -12,9 +12,9 @@ export default function TopNavigation() {
     redirectIfFound: true,
   });
   const router = useRouter();
-  useEffect(()=>{
-    console.log(`avatar ${user?.avatar}`)
-  })
+  useEffect(() => {
+    console.log(`avatar ${user?.avatar}`);
+  });
   return (
     <header className="bg-white h-16 items-center relative shadow w-full z-10 md:h-20 lg:rounded-2xl">
       <div className="flex flex-center flex-col h-full justify-center mx-auto px-3 relative">

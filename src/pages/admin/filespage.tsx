@@ -44,14 +44,14 @@ export default function fileManger({ data }: { data: FileItemType[] }) {
     var a = document.createElement('a'); //control+C+V大法好🐮🍺
     document.body.appendChild(a); //兼容火狐，将a标签添加到body当中
     //var url = window.URL.createObjectURL(blob); // 获取 blob 本地文件连接 (blob 为纯二进制对象，不能够直接保存到磁盘上)
-    const url = `/api/file/getfile?getPath=${path}`
+    const url = `/api/file/getfile?getPath=${path}`;
     a.href = url;
     a.target = '_self'; // a标签增加target属性
     a.click();
     a.remove(); //移除a标签
     window.URL.revokeObjectURL(url);
 
-    return 
+    return;
     // let paths = path.split('/');
     // var filename = paths[paths.length - 1];
     // if (filename === currentFileName) {
@@ -135,15 +135,23 @@ export default function fileManger({ data }: { data: FileItemType[] }) {
     }
   };
 
-  const [readme, setReadme] = useState('')
+  const [readme, setReadme] = useState('');
 
-  useEffect(()=>{
-    fetch(`${host.api}/file/getfile?getPath=${join(config.fileServerPath,router.query.fullpath as string, 'readme.md')}`).then(res=>{
-      return res.text()
-    }).then(data=>{
-      setReadme(data)
-    })
-  })
+  useEffect(() => {
+    fetch(
+      `${host.api}/file/getfile?getPath=${join(
+        config.fileServerPath,
+        router.query.fullpath as string,
+        'readme.md',
+      )}`,
+    )
+      .then((res) => {
+        return res.text();
+      })
+      .then((data) => {
+        setReadme(data);
+      });
+  });
   return (
     <div className="w-ful h-full overflow-y-auto shadow-lg rounded-2xl bg-white p-5">
       <p className="text-lg my-4 font-medium text-sky-500 dark:text-sky-400">
@@ -232,40 +240,51 @@ export default function fileManger({ data }: { data: FileItemType[] }) {
           )}
         </div>
       </PortalModal>
-      {data.map((item, index) => item.name != 'readme.md' ? (
-        <div key={index} className={`flex mb-3 relative hover:last:flex`}>
-          {item.type == 'folder' ? <FolderIcon /> : <FileIcon />}
-          <span
-            onClick={(e) => {
-              if (item.type === 'file') {
-                downloadFile(config.fileServerPath + '/' + item.fullpath);
-              } else {
-                router.push(`/admin/filespage?fullpath=${item.fullpath}`);
-                setCurrentPath(getNavBar(item.fullpath));
-              }
-            }}
-            onContextMenu={(e) => {
-              e.preventDefault();
-              console.log('触发上下文菜单');
-            }}
-            className="pl-2 hover:text-yellow-500 cursor-pointer ease-in duration-300"
-          >
-            {item.name}
-          </span>
-          <div className="absolute hidden bottom-0 left-0 w-48 h-96 bg-white"></div>
-        </div>
-      ): null)}
-      <ReactMarkdown className='rounded-xl bg-gray-500 text-white p-4'>{readme}</ReactMarkdown>
+      {data.map((item, index) =>
+        item.name != 'readme.md' ? (
+          <div key={index} className={`flex mb-3 relative hover:last:flex`}>
+            {item.type == 'folder' ? <FolderIcon /> : <FileIcon />}
+            <span
+              onClick={(e) => {
+                if (item.type === 'file') {
+                  downloadFile(config.fileServerPath + '/' + item.fullpath);
+                } else {
+                  router.push(`/admin/filespage?fullpath=${item.fullpath}`);
+                  setCurrentPath(getNavBar(item.fullpath));
+                }
+              }}
+              onContextMenu={(e) => {
+                e.preventDefault();
+                console.log('触发上下文菜单');
+              }}
+              className="pl-2 hover:text-yellow-500 cursor-pointer ease-in duration-300"
+            >
+              {item.name}
+            </span>
+            <div className="absolute hidden bottom-0 left-0 w-48 h-96 bg-white"></div>
+          </div>
+        ) : null,
+      )}
+      <ReactMarkdown className="rounded-xl bg-gray-500 text-white p-4">
+        {readme}
+      </ReactMarkdown>
       <form
         className={user?.username !== 'guest' ? '' : 'hidden'}
         onSubmit={handleSubmit((d) => uploadFiles(d))}
       >
         <label className="block">
           <span className="sr-only">选择文件</span>
-          <input {...register('file')} multiple type="file" className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"/>
+          <input
+            {...register('file')}
+            multiple
+            type="file"
+            className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
+          />
         </label>
-        <input 
-        className="mt-4 cursor-pointer text-gray-500 text-sm hover:text-blue-500 hover:bg-blue-50 bg-gray-50 rounded-full px-4 py-2" type="submit"  />
+        <input
+          className="mt-4 cursor-pointer text-gray-500 text-sm hover:text-blue-500 hover:bg-blue-50 bg-gray-50 rounded-full px-4 py-2"
+          type="submit"
+        />
       </form>
     </div>
   );

@@ -8,7 +8,7 @@ import {
   ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
-  Relation
+  Relation,
 } from 'typeorm';
 import { Comment } from './comment';
 import { Post } from './post';

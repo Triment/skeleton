@@ -25,8 +25,7 @@ const handler = (req: NextApiRequest, res: NextApiResponse) => {
     createReadStream(getPath as string)
       .pipe(new Throttle({ rate: 1024 * rate }))
       .pipe(res);
-  } else
-  res.status(404).json({msg: "not found"})
+  } else res.status(404).json({ msg: 'not found' });
 };
 
 export const config = {

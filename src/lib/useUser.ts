@@ -31,8 +31,7 @@ export default function useUser({
       // If redirectIfFound is also set, redirect if the user was found
       (redirectIfFound && user.role && user.role.raw != 'guest')
     ) {
-      if (redirectTo!='')
-      Router.push(redirectTo);
+      if (redirectTo != '') Router.push(redirectTo);
     }
   }, [user, redirectIfFound, redirectTo]);
 
