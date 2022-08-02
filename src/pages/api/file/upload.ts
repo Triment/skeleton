@@ -1,5 +1,5 @@
 import { IncomingForm } from 'formidable';
-import fs from 'fs';
+import mv from 'mv';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { join } from 'path';
 import { config as globalConfig } from '../../../config';
@@ -15,27 +15,32 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   //fields: { path: [ '/' ] }, files: { file:
   let result = new Map<string, string>();
   for (const filename of Object.keys((data as any).files)) {
-    try{
-      fs.renameSync(
-      (data as any).files[filename][0].filepath,
-      join(
-        globalConfig.fileServerPath,
-        (data as any).fields.path[0] as string,
-        (data as any).files[filename][0].originalFilename,
-      ),
-    );
-    } catch(error) {
-      res.status(200).json({ error: String(error)});
-      return
+    try {
+      const mvfile = new Promise((resolve, reject) => {
+        mv(
+          (data as any).files[filename][0].filepath,
+          join(
+            globalConfig.fileServerPath,
+            (data as any).fields.path[0] as string,
+            (data as any).files[filename][0].originalFilename,
+          ),
+          (err) => {
+            reject(String(err));
+          },
+        );
+        resolve('ok');
+      });
+      result.set(
+        filename,
+        join(
+          (data as any).fields.path[0] as string,
+          (data as any).files[filename][0].originalFilename,
+        ),
+      );
+    } catch (err) {
+      res.status(200).json(err);
+      return;
     }
-    
-    result.set(
-      filename,
-      join(
-        (data as any).fields.path[0] as string,
-        (data as any).files[filename][0].originalFilename,
-      ),
-    );
   }
   res.status(200).json(Object.fromEntries(result));
 };
