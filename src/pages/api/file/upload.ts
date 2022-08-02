@@ -12,11 +12,11 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       resolve({ fields, files });
     });
   });
-  console.log(data);
   //fields: { path: [ '/' ] }, files: { file:
   let result = new Map<string, string>();
   for (const filename of Object.keys((data as any).files)) {
-    fs.renameSync(
+    try{
+      fs.renameSync(
       (data as any).files[filename][0].filepath,
       join(
         globalConfig.fileServerPath,
@@ -24,6 +24,11 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         (data as any).files[filename][0].originalFilename,
       ),
     );
+    } catch(error) {
+      res.status(200).json({ error: String(error)});
+      return
+    }
+    
     result.set(
       filename,
       join(

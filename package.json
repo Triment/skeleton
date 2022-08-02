@@ -22,8 +22,8 @@
   ],
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
+    "build": "NODE_ENV=production next build",
+    "start": "NODE_ENV=production next start",
     "lint": "next lint && eslint '*/**/*.{ts,tsx}' --fix",
     "prepare": "husky install",
     "format": "prettier '*/**/*.{ts,tsx}' --write"
@@ -73,6 +73,7 @@
     "babel-plugin-transform-remove-console": "^6.9.4",
     "babel-plugin-transform-remove-imports": "^1.7.0",
     "babel-plugin-transform-typescript-metadata": "^0.3.2",
+    "cross-env": "^7.0.3",
     "eslint": "^8.19.0",
     "eslint-config-next": "^12.2.0",
     "eslint-config-prettier": "^8.5.0",
@@ -82,7 +83,7 @@
     "postcss": "^8.4.14",
     "prettier": "^2.7.1",
     "tailwindcss": "^3.1.4",
-    "typescript": "4.7.4"
+    "typescript": "^4.7.4"
   },
   "lint-staged": {
     "*.{js,jsx}": [
