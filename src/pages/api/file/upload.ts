@@ -1,4 +1,5 @@
 import { IncomingForm } from 'formidable';
+import { existsSync, unlinkSync } from 'fs';
 import mv from 'mv';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { join } from 'path';
@@ -12,10 +13,28 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       resolve({ fields, files });
     });
   });
+
   //fields: { path: [ '/' ] }, files: { file:
   let result = new Map<string, string>();
   for (const filename of Object.keys((data as any).files)) {
     try {
+      if (
+        existsSync(
+          join(
+            globalConfig.fileServerPath,
+            (data as any).fields.path[0] as string,
+            (data as any).files[filename][0].originalFilename,
+          ),
+        )
+      ) {
+        unlinkSync(
+          join(
+            globalConfig.fileServerPath,
+            (data as any).fields.path[0] as string,
+            (data as any).files[filename][0].originalFilename,
+          ),
+        );
+      }
       const mvfile = new Promise((resolve, reject) => {
         mv(
           (data as any).files[filename][0].filepath,
@@ -30,6 +49,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         );
         resolve('ok');
       });
+      await mvfile;
       result.set(
         filename,
         join(
