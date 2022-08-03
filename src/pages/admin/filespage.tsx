@@ -1,9 +1,13 @@
+import 'katex/dist/katex.min.css';
 import { NextPageContext } from 'next';
 import { useRouter } from 'next/router';
 import { join } from 'path';
 import { useEffect, useState } from 'react';
 import { FieldValues, useForm } from 'react-hook-form';
 import ReactMarkdown from 'react-markdown';
+import rehypeKatex from 'rehype-katex';
+import rehypeRaw from "rehype-raw";
+import remarkMath from 'remark-math';
 import { FileIcon, FolderIcon } from '../../components/docs/icons';
 import { Progress } from '../../components/progress';
 import { config, host } from '../../config';
@@ -154,7 +158,7 @@ export default function fileManger({ data }: { data: FileItemType[] }) {
       });
   }, [fullpath]);
   return (
-    <div className="w-ful h-full overflow-y-auto shadow-lg rounded-2xl bg-white p-5">
+    <div className="w-ful h-4/5 overflow-y-auto shadow-lg rounded-2xl bg-white p-5">
       <p className="text-lg my-4 font-medium text-sky-500 dark:text-sky-400">
         默认500kb/s下载，登录可享受超高速下载（企业微信联系林帅开通）
       </p>
@@ -269,7 +273,10 @@ export default function fileManger({ data }: { data: FileItemType[] }) {
         ) : null,
       )}
       {readme.length > 0 && (
-        <ReactMarkdown className="rounded-xl shadow-xl bg-gray-500 text-white p-4 m-2">
+        <ReactMarkdown 
+        remarkPlugins={[remarkMath]}
+        rehypePlugins={[rehypeKatex, rehypeRaw]}
+        className="rounded-xl shadow-xl bg-gray-500 text-white p-4 m-2">
           {readme}
         </ReactMarkdown>
       )}
