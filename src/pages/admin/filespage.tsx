@@ -136,12 +136,13 @@ export default function fileManger({ data }: { data: FileItemType[] }) {
   };
 
   const [readme, setReadme] = useState('');
-
+  const [fullpath, setFullpath] = useState(router.query.fullpath as string)
   useEffect(() => {
+    console.log(router.pathname)
     fetch(
       `${host.api}/file/getfile?getPath=${join(
         config.fileServerPath,
-        router.query.fullpath as string,
+        fullpath,
         'readme.md',
       )}`,
     )
@@ -151,7 +152,7 @@ export default function fileManger({ data }: { data: FileItemType[] }) {
       .then((data) => {
         if (data) setReadme(data);
       });
-  });
+  }, [fullpath]);
   return (
     <div className="w-ful h-full overflow-y-auto shadow-lg rounded-2xl bg-white p-5">
       <p className="text-lg my-4 font-medium text-sky-500 dark:text-sky-400">
@@ -250,6 +251,8 @@ export default function fileManger({ data }: { data: FileItemType[] }) {
                   downloadFile(config.fileServerPath + '/' + item.fullpath);
                 } else {
                   router.push(`/admin/filespage?fullpath=${item.fullpath}`);
+                  setReadme('')
+                  setFullpath(item.fullpath)
                   setCurrentPath(getNavBar(item.fullpath));
                 }
               }}
