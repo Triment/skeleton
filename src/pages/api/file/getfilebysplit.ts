@@ -9,7 +9,7 @@ export const getFileFolder = () => {
 };
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
-  const filepath = join(getFileFolder(), req.query.fullpath as string);
+  const filepath = join(getFileFolder(), decodeURIComponent(req.query.fullpath as string));
   var data = [];
   for (const t of fs.readdirSync(filepath)) {
     data.push({
