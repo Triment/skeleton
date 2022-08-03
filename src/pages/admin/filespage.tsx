@@ -250,7 +250,7 @@ export default function fileManger({ data }: { data: FileItemType[] }) {
                 if (item.type === 'file') {
                   downloadFile(config.fileServerPath + '/' + item.fullpath);
                 } else {
-                  router.push(`/admin/filespage?fullpath=${item.fullpath}`);
+                  router.push(`/admin/filespage?fullpath=${encodeURI(item.fullpath)}`);
                   setReadme('')
                   setFullpath(item.fullpath)
                   setCurrentPath(getNavBar(item.fullpath));
