@@ -4,7 +4,7 @@ import {
   Entity,
   Index,
   PrimaryGeneratedColumn,
-  UpdateDateColumn,
+  UpdateDateColumn
 } from 'typeorm';
 
 @Entity()
@@ -29,7 +29,7 @@ class Analysis {
   })
   count!: number;
 
-  @Column('varchar')
+  @Column('text')
   last_browse: string | undefined;
 
   @CreateDateColumn({ type: 'timestamp' })

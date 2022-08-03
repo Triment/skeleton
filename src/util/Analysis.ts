@@ -16,7 +16,7 @@ export const AnalysisCount = async ({ req, res }: NextPageContext) => {
     });
     if (!!analysis) {
       analysis!.count += 1;
-      analysis!.last_browse = req?.url;
+      analysis!.last_browse = encodeURIComponent(req?.url!);
       await DataBase.manager.save(analysis);
     }
   } else {

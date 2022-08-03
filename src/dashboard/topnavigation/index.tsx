@@ -71,7 +71,7 @@ export default function TopNavigation() {
                 }),
                 false,
               );
-              router.push('/admin/filemanger');
+              router.push('/admin/filespage?fullpath=/');
             }}
             className="flex cursor-pointer items-center justify-end ml-5 p-1 relative w-1/4 sm:mr-0 sm:right-auto hover:text-blue-500"
           >
