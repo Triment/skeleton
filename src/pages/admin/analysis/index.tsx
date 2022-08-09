@@ -17,8 +17,8 @@ const ShowItem = ({ item }: { item: Analysis }) => {
         <h3 className="mx-2 my-1 px-2 py-1 flex items-center font-semibold text-xs rounded-md text-gray-500 bg-gray-200">ip: {item.ip_src}</h3>
         <span className="mx-2 my-1 px-2 py-1 flex items-center text-xs rounded-md font-semibold text-green-500 bg-green-50">
             ip归属地: {local}</span>
-        <span className="mx-2 my-1 px-2 py-1 flex items-center text-xs rounded-md font-semibold text-green-500 bg-green-50">
-            最后访问文件路径: {item.last_browse}</span>
+        {/* <span className="mx-2 my-1 px-2 py-1 flex items-center text-xs rounded-md font-semibold text-green-500 bg-green-50">
+            最后访问文件路径: {item.last_browse}</span> */}
         <span className="mx-2 my-1 px-2 py-1 flex items-center text-xs rounded-md font-semibold text-green-500 bg-green-50">
             最后访问时间: {item.updatedAt as unknown as string}</span>
         <span className="mx-2 my-1 px-2 py-1 flex items-center text-xs rounded-md font-semibold text-green-500 bg-green-50">

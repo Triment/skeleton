@@ -5,7 +5,7 @@ import { withDB } from '../../../util/ApiWrapper';
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   const data = await DataBase.manager.findAndCount(Analysis, {
-    order: { updatedAt: 'DESC' },
+    order: { updatedAt: 'DESC', count: 'DESC' },
   });
   res.status(200).json(data);
 };
