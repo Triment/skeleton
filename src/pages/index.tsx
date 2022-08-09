@@ -1,8 +1,18 @@
 import { NextPageContext } from 'next';
-import Content from '../components/content';
+import { useRouter } from 'next/router';
+import { useEffect } from 'react';
+
+
 
 export default function HomePage() {
-  return <Content></Content>;
+  const { push } = useRouter();
+  const Redirect = () => {
+    useEffect(() => {
+      push('/auth/login');
+    });
+    return <></>;
+  };
+  return <Redirect />;
 }
 
 export const getServerSideProps = ({ req, res }: NextPageContext) => {
