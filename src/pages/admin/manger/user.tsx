@@ -211,7 +211,7 @@ export default function MangerUser({
                   <div className="flex items-center pr-8">
                     <img
                       alt={item.username}
-                      src={`${host.api}/file/getfile?getPath=${config.fileServerPath}/${item.avatar}`}
+                      src={`${host.api}/file/getfile?getPath=${config.fileServerPath}${item.avatar}`}
                       className="h-10 w-10 flex-none rounded-full"
                     />
                     <div className="ml-2 flex-auto">

@@ -246,7 +246,7 @@ export default function fileManger({ data }: { data: FileItemType[] }) {
         </div>
       </PortalModal>
       {data.map((item, index) =>
-        item.name != 'readme.md' ? (
+      !['avatar', 'readme.md'].includes(item.name) ? (
           <div key={index} className={`flex mb-3 relative hover:last:flex`}>
             {item.type == 'folder' ? <FolderIcon /> : <FileIcon />}
             {item.type == 'file' ? <span
