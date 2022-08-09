@@ -24,8 +24,7 @@ const publicMenus = [
   '/auth/login',
   '/admin/manger/',
   '/admin/filemanger',
-  '/admin/filespage',
-  '/admin/tools/mdp',
+  '/admin/filespage'
 ];
 
 function DashboardLayout({ children }: ComponentProps<'div'>) {
