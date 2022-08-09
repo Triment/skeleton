@@ -13,7 +13,7 @@ const ShowItem = ({ item }: { item: Analysis }) => {
                 data.data && data.data.length > 0 && setLocal(data.data[0].location)
             })
     })
-    return <div className="flex">
+    return <div className={`flex ${local.startsWith("美国")||local.startsWith("本地") ? 'hidden':''}`}>
         <h3 className="mx-2 my-1 px-2 py-1 flex items-center font-semibold text-xs rounded-md text-gray-500 bg-gray-200">ip: {item.ip_src}</h3>
         <span className="mx-2 my-1 px-2 py-1 flex items-center text-xs rounded-md font-semibold text-green-500 bg-green-50">
             ip归属地: {local}</span>
