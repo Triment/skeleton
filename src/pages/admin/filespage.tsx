@@ -1,5 +1,6 @@
 import 'katex/dist/katex.min.css';
 import { NextPageContext } from 'next';
+import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { join } from 'path';
 import { useEffect, useState } from 'react';
@@ -224,9 +225,8 @@ export default function fileManger({ data }: { data: FileItemType[] }) {
             ''
           ) : (
             <div
-              className={`${
-                downloadProgress == 100 ? 'opacity-100' : 'opacity-0'
-              }`}
+              className={`${downloadProgress == 100 ? 'opacity-100' : 'opacity-0'
+                }`}
             >
               下载完成
               <svg
@@ -249,16 +249,9 @@ export default function fileManger({ data }: { data: FileItemType[] }) {
         item.name != 'readme.md' ? (
           <div key={index} className={`flex mb-3 relative hover:last:flex`}>
             {item.type == 'folder' ? <FolderIcon /> : <FileIcon />}
-            <span
+            {item.type == 'file' ? <span
               onClick={(e) => {
-                if (item.type === 'file') {
-                  downloadFile(config.fileServerPath + '/' + item.fullpath);
-                } else {
-                  router.push(`/admin/filespage?fullpath=${encodeURIComponent(item.fullpath)}`);
-                  setReadme('')
-                  setFullpath(item.fullpath)
-                  setCurrentPath(getNavBar(item.fullpath));
-                }
+                downloadFile(config.fileServerPath + '/' + item.fullpath);
               }}
               onContextMenu={(e) => {
                 e.preventDefault();
@@ -267,16 +260,30 @@ export default function fileManger({ data }: { data: FileItemType[] }) {
               className="pl-2 hover:text-yellow-500 cursor-pointer ease-in duration-300"
             >
               {item.name}
+            </span> : <span
+              onClick={(e) => {
+                setReadme('')
+                setFullpath(item.fullpath)
+                setCurrentPath(getNavBar(item.fullpath));
+              }}
+              onContextMenu={(e) => {
+                e.preventDefault();
+                console.log('触发上下文菜单');
+              }}
+              className="pl-2 hover:text-yellow-500 cursor-pointer ease-in duration-300"
+            >
+              <Link href={`/admin/filespage?fullpath=${encodeURIComponent(item.fullpath)}`}>{item.name}</Link>
             </span>
+            }
             <div className="absolute hidden bottom-0 left-0 w-48 h-96 bg-white"></div>
           </div>
         ) : null,
       )}
       {readme.length > 0 && (
-        <ReactMarkdown 
-        remarkPlugins={[remarkMath]}
-        rehypePlugins={[rehypeKatex, rehypeRaw]}
-        className="rounded-xl shadow-xl bg-gray-500 text-white p-4 m-2">
+        <ReactMarkdown
+          remarkPlugins={[remarkMath]}
+          rehypePlugins={[rehypeKatex, rehypeRaw]}
+          className="rounded-xl shadow-xl bg-gray-500 text-white p-4 m-2">
           {readme}
         </ReactMarkdown>
       )}
